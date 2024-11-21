@@ -143,7 +143,7 @@ admin_route.get('/admin_transactions', adminAuth.isLogin, adminController.admin_
 
 
 
-// Logout
+// Admin Logout
 admin_route.get('/logout', adminAuth.isLogin, adminController.adminLogout);
 
 
