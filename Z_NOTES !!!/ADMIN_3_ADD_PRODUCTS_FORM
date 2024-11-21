@@ -1,0 +1,232 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="row">
+                        <div class="col-9">
+
+                            <% if (typeof message !=='undefined' ) { %>
+                                <p>
+                                    <%= message %>
+                                </p>
+                                <% } %>
+
+                                    <div class="content-header">
+                                        <h2 class="content-title">Add New Product</h2>
+                                        <div>
+                                            <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save
+                                                to
+                                                draft</button>
+                                            <input type="submit" value="Publish"
+                                                class="btn btn-md rounded font-sm hover-up btn-success float-right">
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h4>Basic</h4>
+                                </div>
+                                <div class="card-body">
+
+
+                                    <form action="" method="post" enctype="multipart/form-data">
+
+                                        <div class="mb-4">
+                                            <label for="productName" class="form-label">Product title</label>
+                                            <input type="text" placeholder="Type here" class="form-control"
+                                                name="productName" required>
+                                        </div>
+
+
+                                        <div class="mb-4">
+                                            <label for="model" class="form-label">Model</label>
+                                            <input type="text" placeholder="Type here" class="form-control" name="model"
+                                                required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="brand" class="form-label">Brand</label>
+                                            <input type="text" placeholder="Type here" class="form-control" name="brand"
+                                                required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="scale" class="form-label">Scale</label>
+                                            <input type="text" placeholder="Type here" class="form-control" name="scale"
+                                                required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="colour" class="form-label">Colour</label>
+                                            <input type="text" placeholder="Type here" class="form-control"
+                                                name="colour" required>
+                                        </div>
+
+
+                                        <div class="mb-4">
+                                            <label for="description" class="form-label">Full description</label>
+                                            <textarea placeholder="Type here" class="form-control" rows="4"
+                                                name="description" required></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="card-header">
+                                                <h4>Pricing</h4>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Regular price</label>
+                                                    <div class="row gx-2">
+                                                        <input placeholder="₹" type="text" class="form-control"
+                                                            name="regularPrice" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Promotional price</label>
+                                                    <input placeholder="₹" type="text" class="form-control"
+                                                        name="salesPrice" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h4>Media</h4>
+                                                </div>
+
+
+                                                <div class="card-body">
+                                                    <div class="input-upload">
+                                                        <img src="/public/admin-assets/imgs/theme/upload.svg" alt="">
+                                                        <label for="productImages">Product Image:</label>
+                                                        <input type="file" class="form-control" name="productImages"
+                                                            id="productImages" accept="productImages/*" multiple>
+                                                    </div>
+                                                    <p id="imageMessage" style="color: red;"></p>
+                                                    <div id="imagePreviewContainer" style="width: 100%;">
+
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div> <!-- card end// -->
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h4>Organization</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row gx-2">
+                                                        <div class="col-sm-6 mb-3">
+                                                            <label class="form-label">Category</label>
+                                                            <select name="category" class="form-select">
+                                                                <% if (categories.length> 0) {
+                                                                    for (let i = 0; i < categories.length; i++) { %>
+                                                                        <option>
+                                                                            <%= categories[i].categoryName %>
+                                                                        </option>
+                                                                        <% } } else { %>
+                                                                            <tr>
+                                                                                <td colspan="5">Categories data not
+                                                                                    found</td>
+                                                                            </tr>
+                                                                            <% } %>
+                                                            </select>
+                                                        </div>
+                                                    </div> <!-- row.// -->
+                                                </div>
+                                            </div> <!-- card end// -->
+
+                                        </div>
+                                        <div class="card">
+                                            <input type="submit" value="Add Product"
+                                                class="btn btn-md rounded font-sm hover-up btn-success float-right">
+                                        </div>
+                                    </form>
+
+
+
+
+
+
+
+
+
+                                </div>
+                            </div> <!-- card end// -->
+                        </div>
+
+                    </div>
+                </section> <!-- content-main end// -->
+
+
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
+
+
+
+
+                    <script>
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            let filesList = []; // To maintain the list of files to upload
+
+                            document.getElementById('productImages').addEventListener('change', function (event) {
+                                filesList = Array.from(event.target.files); // Store the selected files in the array
+
+                                // Remove existing images in the preview container
+                                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                                while (imagePreviewContainer.firstChild) {
+                                    imagePreviewContainer.removeChild(imagePreviewContainer.firstChild);
+                                }
+
+                                // Add images to the preview and attach the close event
+                                filesList.forEach(function (file, index) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+
+                                        var imageContainer = document.createElement('div');
+                                        imageContainer.classList.add('uploaded-image-container');
+
+                                        var img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        img.style.maxWidth = '100px';
+                                        img.style.height = 'auto';
+                                        img.alt = 'Uploaded Image';
+                                        img.classList.add('uploaded-image');
+
+                                        var closeButton = document.createElement('div');
+                                        closeButton.classList.add('close-icon');
+                                        closeButton.innerHTML = '&#10006;';
+                                        closeButton.style.cursor = 'default';
+
+                                        // Remove the image from the preview and from the filesList array
+                                        closeButton.addEventListener('click', function () {
+                                            filesList.splice(index, 1); // Remove the file from the array
+                                            imageContainer.remove(); // Remove the preview
+
+                                            // Update the file input with the new file list
+                                            const dataTransfer = new DataTransfer();
+                                            filesList.forEach(file => dataTransfer.items.add(file));
+                                            document.getElementById('productImages').files = dataTransfer.files;
+                                        });
+
+                                        imageContainer.appendChild(img);
+                                        imageContainer.appendChild(closeButton);
+                                        imagePreviewContainer.appendChild(imageContainer);
+                                    };
+
+                                    reader.readAsDataURL(file);
+                                });
+                            });
+                        });
+
+                    </script>

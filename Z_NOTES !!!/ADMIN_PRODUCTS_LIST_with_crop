@@ -1,0 +1,219 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Products List</h2>
+                            <p>Lorem ipsum dolor sit amet.</p>
+                        </div>
+                        <div>
+                            <a href="#" class="btn btn-light rounded font-md">Export</a>
+                            <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                            <a href="admin_add_product_form" class="btn btn-primary btn-sm rounded">Create new</a>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col col-check flex-grow-0">
+                                    <div class="form-check ms-2">
+                                        <input class="form-check-input" type="checkbox" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                                    <select class="form-select">
+                                        <option selected>All category</option>
+                                        <option>Electronics</option>
+                                        <option>Clothes</option>
+                                        <option>Automobile</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <input type="date" value="02.05.2021" class="form-control">
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <select class="form-select">
+                                        <option selected>Status</option>
+                                        <option>Active</option>
+                                        <option>Disabled</option>
+                                        <option>Show all</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </header> <!-- card-header end// -->
+
+
+                        <div class="card-body">
+                            <article class="itemlist">
+                                <div class="row align-items-center">
+                                    <div class="col col-check flex-grow-0">
+                                        <div class="form-check">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-name text-center "> <span> Product </span>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-name text-center "> <span> Name </span>
+                                    </div>
+                                    <div class="col-lg-1 col-sm-2 col-4 col-price text-center"> <span> Regular Price
+                                        </span> </div>
+                                    <div class="col-lg-1 col-sm-2 col-4 col-status text-center">
+                                        <span class="badge rounded-pill alert-success text-center">Sale Price</span>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-name text-center"> <span> Category </span>
+                                    </div>
+                                    <div class="col-lg-1 col-sm-2 col-4 col-status text-center"> <span> Active</span>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-center "> <span>Action</span>
+                                    </div>
+                                </div> <!-- row .// -->
+                            </article>
+                        </div>
+
+                        <div class="card-body">
+
+
+                            <% if (products.length> 0) {
+                                for (let i = 0; i < products.length; i++) { %>
+
+                                    <article class="itemlist">
+                                        <div class="row align-items-center">
+                                            <div class="col col-check flex-grow-0">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-2 col-4 col-name text-center">
+                                                <a href="#">
+                                                    <div class="row align-items-center profile-pic-container">
+
+                                                        <% if (products[i].productImages &&
+                                                            products[i].productImages.length> 0) { %>
+
+
+                                                            <% products[i].productImages.forEach(image=> { %>
+
+                                                                <img src="/<%= image %>"
+                                                                
+                                                                alt="no image" class="d-block w-100"
+                                                                    style="max-width: 100px; max-height: 70px; object-fit: contain;">
+                                                                
+                                                                    <% }) %>
+                                                                    <% } else { %>
+                                                                        No Image
+                                                                        <% } %>
+
+                                                    </div>
+
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-name text-center"> <span>
+                                                    <%= products[i].productName %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-1 col-sm-2 col-4 col-price text-center"> <span>
+                                                    <%= products[i].regularPrice %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-1 col-sm-2 col-4 col-status text-center">
+                                                <span class="badge rounded-pill alert-success">
+                                                    <%= products[i].salesPrice %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-1 col-sm-2 col-4 col-name text-center"> <span>
+                                                    <%= products[i].category %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-1 col-sm-2 col-4 col-status text-center">
+                                                <span>
+                                                    <% if(products[i].isActive) { %> Active <% } else { %> Not Active
+                                                            <% } %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                                <a href="admin_edit_product_form?id=<%= products[i]._id %>"
+                                                    class="btn btn-sm font-sm rounded btn-brand">
+                                                    <i class="material-icons md-edit"></i> Edit
+                                                </a>
+                                                <a href="#"
+                                                    onclick="confirmDeleteProduct('/admin/admin_delete_product?id=<%= products[i]._id %>')"
+                                                    class="btn btn-sm font-sm btn-light rounded">
+                                                    <i class="material-icons md-delete_forever"></i> Delete
+                                                </a>
+                                            </div>
+                                        </div> <!-- row .// -->
+                                    </article> <!-- itemlist  .// -->
+
+                                    <% } } else { %>
+                                        <tr>
+                                            <td colspan="5">Products data not found</td>
+                                        </tr>
+                                        <% } %>
+
+
+
+                        </div> <!-- card-body end// -->
+                    </div> <!-- card end// -->
+                    <div class="pagination-area mt-30 mb-50">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-start">
+
+                                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                    <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                                        <i class="material-icons md-chevron_left"></i>
+                                    </a>
+                                </li>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+                                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                            <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                                                <i class="material-icons md-chevron_right"></i>
+                                            </a>
+                                        </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </section> <!-- content-main end// -->
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
+
+
+
+
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+                    <script>
+
+                        function confirmDeleteProduct(deleteproduct) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete this product.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = deleteproduct;
+                                }
+                            });
+                        }
+                    </script>

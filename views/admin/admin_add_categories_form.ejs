@@ -1,0 +1,175 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Categories </h2>
+                            <h5>Add a new category</h5>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-3">
+
+                                    <% if (typeof message !== 'undefined') { %>
+                                        <p style="color: red; font-size: 18px; font-weight: bold;">
+                                            <%= message %>
+                                        </p>
+                                    <% } %>
+                                    
+
+                                    <form action="" method="post" onsubmit="return validateForm()"  enctype="multipart/form-data" >
+
+                                        <div class="mb-4">
+                                            <label for="categoryName" class="form-label">Category Name</label>
+                                            <input type="text" placeholder="Enter Name" class="form-control"
+                                                name="categoryName" id="categoryName" >
+                                                <p id="categoryNameMessage" style="color: red;"></p>
+
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="categoryDescription" class="form-label">Description</label>
+                                            <input type="text" placeholder="Enter Description" class="form-control"
+                                                name="categoryDescription" id="categoryDescription" >
+                                                <p id="categoryDescriptionMessage" style="color: red;"></p>
+
+                                        </div>
+
+
+                                        <div class="card-body">
+                                            <div class="input-upload">
+                                                <img src="/public/admin-assets/imgs/theme/upload.svg" alt="">
+                                                <label for="categoryImages" style="display: block; text-align: left;" >Category Image:</label>
+                                                <input type="file" class="form-control mt-15 " name="categoryImages"
+                                                    id="categoryImages" accept="categoryImages/*">
+
+                                            </div>
+                                            <p id="imageMessage" style="color: red;"></p>
+                                            <div id="imagePreviewContainer" style="width: 100%;">
+
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <input type="submit" value="Add Category"
+                                                class="btn btn-md rounded font-sm hover-up btn-success float-right">
+                                        </div>
+                                    </form>
+
+
+
+                                    <% if (typeof message !=='undefined' ) { %>
+                                        <p>
+                                            <%= message %>
+                                        </p>
+                                        <% } %>
+                                </div>
+
+
+                            </div> <!-- .row // -->
+                        </div> <!-- card body .// -->
+                    </div> <!-- card .// -->
+                </section> <!-- content-main end// -->
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
+
+
+                    <script>
+                        // form upload image preview
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            let filesList = []; // To maintain the list of files to upload
+
+                            document.getElementById('categoryImages').addEventListener('change', function (event) {
+                                filesList = Array.from(event.target.files); // Store the selected files in the array
+
+                                // Remove existing images in the preview container
+                                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                                while (imagePreviewContainer.firstChild) {
+                                    imagePreviewContainer.removeChild(imagePreviewContainer.firstChild);
+                                }
+
+                                // Add images to the preview and attach the close event
+                                filesList.forEach(function (file, index) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+
+                                        var imageContainer = document.createElement('div');
+                                        imageContainer.classList.add('uploaded-image-container');
+
+                                        var img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        img.style.maxWidth = '100px';
+                                        img.style.height = 'auto';
+                                        img.alt = 'Uploaded Image';
+                                        img.classList.add('uploaded-image');
+
+                                        var closeButton = document.createElement('div');
+                                        closeButton.classList.add('close-icon');
+                                        closeButton.innerHTML = '&#10006;';
+                                        closeButton.style.cursor = 'default';
+
+                                        // Remove the image from the preview and from the filesList array
+                                        closeButton.addEventListener('click', function () {
+                                            filesList.splice(index, 1); // Remove the file from the array
+                                            imageContainer.remove(); // Remove the preview
+
+                                            // Update the file input with the new file list
+                                            const dataTransfer = new DataTransfer();
+                                            filesList.forEach(file => dataTransfer.items.add(file));
+                                            document.getElementById('categoryImages').files = dataTransfer.files;
+                                        });
+
+                                        imageContainer.appendChild(img);
+                                        imageContainer.appendChild(closeButton);
+                                        imagePreviewContainer.appendChild(imageContainer);
+                                    };
+
+                                    reader.readAsDataURL(file);
+                                });
+                            });
+
+
+                            
+
+                        });
+
+
+                        function validateForm() {
+
+                            var categoryName = document.getElementById('categoryName').value;
+                            var categoryDescription = document.getElementById('categoryDescription').value;
+
+                            if (categoryName.trim() === '') {
+                                document.getElementById('categoryNameMessage').innerText = 'Category name cannot be empty';
+                                return false;
+                            } else {
+                                document.getElementById('categoryNameMessage').innerText = '';
+                            }
+
+                            if (categoryDescription.trim() === '') {
+                                document.getElementById('categoryDescriptionMessage').innerText = 'Category Description cannot be empty';
+                                return false;
+                            } else {
+                                document.getElementById('categoryDescriptionMessage').innerText = '';
+                            }
+
+                            return true
+
+                        }
+
+                    </script>

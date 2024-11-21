@@ -1,0 +1,221 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+
+
+
+
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Transactions List</h2>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap mb-0" id="transactions">
+                                    <thead class="table-dark">
+                                        <tr>
+
+                                            <th class="align-middle" scope="col">Order ID</th>
+                                            <th class="align-middle" scope="col">Billing Name</th>
+                                            <th class="align-middle" scope="col">Date</th>
+                                            <th class="align-middle" scope="col">Order Amount</th>
+                                            <th class="align-middle" scope="col">Discount %</th>
+                                            <th class="align-middle" scope="col">Total</th>
+                                            <th class="align-middle" scope="col">Payment Status</th>
+                                            <th class="align-middle" scope="col">Payment Method</th>
+                                            <th class="align-middle" scope="col">View Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if(ordersData && ordersData.length> 0 ) { %>
+                                            <% for(let i=0 ; i < ordersData.length ; i++){ %>
+                                                <tr>
+
+                                                    <td><a class="fw-bold">
+                                                            <%= ordersData[i].orderid %>
+                                                        </a> </td>
+                                                    <td>
+                                                        <%= ordersData[i].address.firstName %>
+                                                            <%= ordersData[i].address.lastName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= ordersData[i].orderDate.toLocaleString('en-US') %>
+                                                    </td>
+
+                                                    <td class="fw-bold text-secondary " style="font-size: 1.2em;">
+                                                        ₹<%= ordersData[i].totalSum %>
+                                                    </td>
+                                                    <td class="fw-bold text-danger " style="font-size: 1.2em;">
+                                                        -<%= ordersData[i].discountPercentage %>%
+                                                    </td>
+
+                                                    <td class="fw-bold text-success " style="font-size: 1.2em;">
+                                                        ₹<%= ordersData[i].totalPrice %>
+                                                    </td>
+
+
+
+                                                    <td>
+                                                        <span class="badge badge-pill badge-soft-success">
+                                                            <%= ordersData[i].paymentStatus %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <i
+                                                            class="material-icons md-payment font-xxl text-muted mr-5"></i>
+                                                        <%= ordersData[i].paymentMethod %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/admin_individual_order_page?ordersIndividualId=<%= ordersData[i]._id %>"
+                                                            class="btn btn-md rounded font-sm">Order Details</a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <% } %>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Moment.js (for date parsing) -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+                    <!-- jQuery and DataTables -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            // Initialize DataTable with order by date (recent first)
+                            let table = new DataTable('#transactions', {
+                                "order": [[2, 'desc']],
+                                "columnDefs": [
+                                    {
+                                        "targets": [2],
+                                        "type": "date"
+                                    }
+                                ]
+                            });
+
+
+                            // Function to filter table rows by date range
+                            function filterByDateRange(startDate, endDate) {
+                                // Clear previous filter if exists
+                                $.fn.dataTable.ext.search.pop();
+
+                                // Add new filter function
+                                $.fn.dataTable.ext.search.push(function (settings, data) {
+                                    const dateStr = data[2]; // Date column index
+                                    const rowDate = moment(dateStr, 'MM/DD/YYYY, h:mm:ss A'); // Adjust format as needed
+
+                                    // Check if date falls within the range
+                                    return rowDate.isBetween(startDate, endDate, null, '[]'); // inclusive range
+                                });
+
+                                // Redraw table to apply filter and update pagination
+                                table.draw();
+                            }
+
+                            // Function to reset filter and remove inline active styles
+                            function resetFilter() {
+                                $.fn.dataTable.ext.search.pop(); // Remove custom filter
+                                table.draw(); // Redraw table to show all data
+                                // Remove active styles from all filter buttons
+                                $('.filter-btn').css({
+                                    'background-color': '',
+                                    'color': '' // Reset colors
+                                });
+                            }
+
+                            // Event listeners for filter buttons
+                            $('#filter-last-hour').on('click', function () {
+                                // Reset filter and apply active style
+                                resetFilter();
+                                $(this).css({
+                                    'background-color': '#007bff', // Highlight color
+                                    'color': 'white' // Text color when active
+                                });
+
+                                const lastHourStart = moment().subtract(1, 'hour'); // One hour ago
+                                const lastHourEnd = moment(); // Current time
+                                filterByDateRange(lastHourStart, lastHourEnd);
+                            });
+
+                            $('#filter-today').on('click', function () {
+                                // Reset filter and apply active style
+                                resetFilter();
+                                $(this).css({
+                                    'background-color': '#007bff', // Highlight color
+                                    'color': 'white' // Text color when active
+                                });
+
+                                const todayStart = moment().startOf('day');
+                                const todayEnd = moment().endOf('day');
+                                filterByDateRange(todayStart, todayEnd);
+                            });
+
+                            $('#filter-week').on('click', function () {
+                                // Reset filter and apply active style
+                                resetFilter();
+                                $(this).css({
+                                    'background-color': '#007bff', // Highlight color
+                                    'color': 'white' // Text color when active
+                                });
+
+                                const startOfWeek = moment().startOf('week');
+                                const endOfWeek = moment().endOf('week');
+                                filterByDateRange(startOfWeek, endOfWeek);
+                            });
+
+                            $('#filter-month').on('click', function () {
+                                // Reset filter and apply active style
+                                resetFilter();
+                                $(this).css({
+                                    'background-color': '#007bff', // Highlight color
+                                    'color': 'white' // Text color when active
+                                });
+
+                                const startOfMonth = moment().startOf('month');
+                                const endOfMonth = moment().endOf('month');
+                                filterByDateRange(startOfMonth, endOfMonth);
+                            });
+
+                            // Reset filter to show all rows
+                            $('#filter-reset').on('click', function () {
+                                // Reset filter and apply active style
+                                resetFilter();
+                                $(this).css({
+                                    'background-color': '#007bff', // Highlight color
+                                    'color': 'white' // Text color when active
+                                });
+                            });
+                        });
+                    </script>
+
+
+                </section>
+
+
+
+
+
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

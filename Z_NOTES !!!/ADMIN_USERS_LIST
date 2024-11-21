@@ -1,0 +1,263 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Users List</h2>
+                            <p>Lorem ipsum dolor sit amet.</p>
+                        </div>
+                        <div>
+                            <a href="#" class="btn btn-light rounded font-md">Export</a>
+                            <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                            <a href="admin_add_users_form" class="btn btn-primary btn-sm rounded">Add New</a>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col col-check flex-grow-0">
+                                    <div class="form-check ms-2">
+                                        <input class="form-check-input" type="checkbox" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                                    <select class="form-select">
+                                        <option selected>All category</option>
+                                        <option>Electronics</option>
+                                        <option>Clothes</option>
+                                        <option>Automobile</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <input type="date" value="02.05.2021" class="form-control">
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <select class="form-select">
+                                        <option selected>Status</option>
+                                        <option>Active</option>
+                                        <option>Disabled</option>
+                                        <option>Show all</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </header> <!-- card-header end// -->
+
+
+                        <div class="card-body">
+                            <article class="itemlist">
+                                <div class="row align-items-center">
+                                    <div class="col col-check flex-grow-0">
+                                        <div class="form-check">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 flex-grow-1 col-name">
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                Profile
+                                            </div>
+
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-2 col-sm-2 col-4 col-price left"> <span>User Name </span> </div>
+
+                                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span> Email </span> </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span> Mobile </span> </div>
+
+                                    <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                        <span> Status</span>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 col-4 col-action ">
+                                        <span>Action</span>
+                                    </div>
+                                </div> <!-- row .// -->
+                            </article>
+                        </div>
+
+                        <div class="card-body">
+
+
+                            <% if (users.length> 0) {
+                                for (let i = 0; i < users.length; i++) { %>
+
+                                    <article class="itemlist">
+                                        <div class="row align-items-center">
+                                            <div class="col col-check flex-grow-0">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4  col-name">
+                                                <a href="#">
+                                                    <div class="row align-items-center profile-pic-container">
+                                                        <% if (users[i].image) { %>
+                                                            <img src="../public/user_images/<%= users[i].image %>"
+                                                                alt="<%= users[i].image %>"
+                                                                style="max-width: 100px; max-height: 100px">
+                                                            <% } else { %>
+                                                                No Image
+                                                                <% } %>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
+                                                    <%= users[i].username %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
+                                                    <%= users[i].email %>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>
+                                                    <%= users[i]. mobile %>
+                                                </span>
+                                            </div>
+
+                                            <div class="col-lg-1 col-sm-2 col-4 col-col-status">
+                                                <span>
+                                                    <% if(users[i].status) { %> Active <% } else { %> Not Active
+                                                            <% } %>
+                                                </span>
+                                            </div>
+                                            <div
+                                                class="col-lg-2 col-sm-2 col-4 col-action text-center d-flex flex-column  align-items-center ">
+                                                <a href="admin_edit_users_form?id=<%= users[i]._id %>"
+                                                    class="btn btn-sm font-sm rounded btn-brand mb-2 w-100 ">
+                                                    <i class="material-icons md-edit"></i> Edit
+                                                </a>
+
+
+
+                                                <% if (users[i].status) { %>
+
+                                                    <a href="#"
+                                                        onclick="confirmBlockUser('/admin/admin_block_user?id=<%= users[i]._id %>')"
+                                                        class="btn btn-sm font-sm rounded mb-2 btn-warning w-100 ">
+                                                        <i class="material-icons md-block"></i> Block
+                                                    </a>
+                                                    <% } else { %>
+                                                        <a href="#"
+                                                            onclick="confirmUnblockUser('/admin/admin_unblock_user?id=<%= users[i]._id %>')"
+                                                            class="btn btn-sm font-sm rounded mb-2 btn-info w-100 ">
+                                                            <i class="material-icons md-undo"></i> UnBlock
+                                                        </a>
+
+                                                        <% } %>
+
+                                                            <a href="#"
+                                                                onclick="confirmDeleteUser('/admin/admin_delete_user?id=<%= users[i]._id %>')"
+                                                                class="btn btn-sm font-sm btn-danger rounded  w-100 ">
+                                                                <i class="material-icons md-delete_forever"></i> Delete
+                                                            </a>
+
+
+                                            </div>
+                                        </div> <!-- row .// -->
+                                    </article> <!-- itemlist  .// -->
+
+                                    <% } } else { %>
+                                        <tr>
+                                            <td colspan="5">users data not found</td>
+                                        </tr>
+                                        <% } %>
+
+
+
+                        </div> <!-- card-body end// -->
+                    </div> <!-- card end// -->
+
+                    <div class="pagination-area mt-15 mb-50">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-start">
+
+                                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                    <a class="page-link" href="?page=<%= currentPage - 1 %>">
+                                        <i class="material-icons md-chevron_left"></i>
+                                    </a>
+                                </li>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+                                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                            <a class="page-link" href="?page=<%= currentPage + 1 %>">
+                                                <i class="material-icons md-chevron_right"></i>
+                                            </a>
+                                        </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+
+                </section> <!-- content-main end// -->
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
+
+
+
+
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+                    <script>
+
+                        function confirmDeleteUser(deleteuser) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete this user.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = deleteuser;
+                                }
+                            });
+                        }
+
+                        function confirmBlockUser(block) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to block this user.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, block it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = block;
+                                }
+                            });
+                        }
+
+                        function confirmUnblockUser(unblock) {
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to unblock this user.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#3085d6',
+                                confirmButtonText: 'Yes, unblock it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = unblock;
+                                }
+                            });
+                        }
+                    </script>

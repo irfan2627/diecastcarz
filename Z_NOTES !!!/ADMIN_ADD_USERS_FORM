@@ -1,0 +1,87 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="content-header">
+                                <h2 class="content-title">Add New User</h2>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h4>Details</h4>
+                                </div>
+                                <div class="card-body">
+
+                                    <form action="" method="post" enctype="multipart/form-data">
+
+                                        <div class="mb-4">
+                                            <label for="username" class="form-label">User Name</label>
+                                            <input type="text" placeholder="Enter Name" class="form-control"
+                                                name="username" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="email" class="form-label">User Email-Id</label>
+                                            <input type="email" placeholder="Enter Email" class="form-control"
+                                                name="email" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="mobile" class="form-label">User Mobile No.</label>
+                                            <input type="mobile" placeholder="Enter Mobile Number" class="form-control"
+                                                name="mobile" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="password" class="form-label">User Password</label>
+                                            <input type="text" placeholder="Enter Password" class="form-control"
+                                                name="password" required>
+                                        </div>
+
+                                        
+                                        
+                                        
+                                         <div class="card mb-4">
+                                            <div class="card-header">
+                                                <h4>User Profile Picture</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="input-upload">
+                                                    <img src="/public/admin-assets/imgs/theme/upload.svg" alt="">
+                                                    <label for="image">Profile Image:</label>
+                                                    <input type="file" class="form-control" name="image" id="image" accept="image/*">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="card">
+                                            <input type="submit" value="Add User"
+                                                class="btn btn-md rounded font-sm hover-up btn-success float-right">
+                                        </div>
+
+                                    </form>
+
+                                    <% if (typeof message !=='undefined' ) { %>
+                                        <p>
+                                            <%= message %>
+                                        </p>
+                                        <% } %>
+                                </div>
+                            </div> <!-- card end// -->
+                        </div>
+                    </div>
+                </section> <!-- content-main end// -->
+
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

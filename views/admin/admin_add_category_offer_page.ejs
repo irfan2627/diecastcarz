@@ -1,0 +1,228 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<div class="screen-overlay"></div>
+<%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+<main class="main-wrap">
+  <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+
+  <section class="content-main">
+
+
+    <div class="card mb-4">
+      <div class="content-header" style="margin: 10px; ">
+
+        <div class="row">
+          <div style="margin: 20px;">
+            <h2>
+              Category offers page
+            </h2>
+          </div>
+
+
+          <hr>
+
+          <div class="col-md-4">
+
+            <img style="height: 200px; width: 300px;" src="/<%= categoriesData.categoryImages %>" alt="" class="img-fluid">
+          </div>
+          <div class="col-md-8">
+            <h2 class="content-title card-title">
+              <%= categoriesData.categoryName %>
+            </h2>
+            <h5>Description: <%= categoriesData.categoryDescription %>
+            </h5>
+
+            <h5>Category Status:
+              <% if (categoriesData.isActive===true) { %>
+              <span class="badge rounded-pill alert-success">Active</span>
+              <% } else { %>
+              <span class="badge rounded-pill alert-danger">Inactive</span>
+              <% } %>
+            </h5>
+            <h5>Category Offer Status:
+              <% if (categoriesData.isCategoryOfferActive===true) { %>
+              <span class="badge rounded-pill alert-success">Active</span>
+              <% } else { %>
+              <span class="badge rounded-pill alert-danger">Inactive</span>
+              <% } %>
+            </h5>
+
+            <div id="errorMessage" style="color: red; margin: 20px; font-style: italic; font-size: 25px;">
+              <% if(message && typeof message !=='undefined' ){ %>
+              <%= message %>
+              <% } %>
+            </div>
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+
+
+
+        <% if (categoriesData.categoryOfferPercentage ) { %>
+        <hr>
+        <hr>
+
+        <div class="row">
+
+          <div class="col-md-8">
+            <h3 class="content-title card-title">
+              Current Offer:
+            </h3>
+            <h5>Category Discount Percentage : <%= categoriesData.categoryOfferPercentage %> %
+            </h5>
+            <h5>Category Discount Expiry Date : <%= categoriesData.categoryOfferExpiryDate.toLocaleString() %>
+            </h5>
+            </h5>
+
+            <% if (categoriesData.isCategoryOfferActive) { %>
+            <h1><a href="#" onclick="confirmBlock('<%= categoriesData._id %>')">
+                <button class="btn btn-sm btn-danger rounded font-sm">Block
+                  Offer</button>
+              </a></h1>
+            <% } else { %>
+            <h1> <a href="#" onclick="confirmUnblock('<%= categoriesData._id %>')">
+                <button class="btn btn-sm btn-success rounded font-sm ml-2">Unblock
+                  Offer</button>
+              </a></h1>
+            <% } %>
+
+          </div>
+
+
+
+        </div>
+
+        <% } %>
+        <hr>
+        <hr>
+        <div>
+
+          <h3>Update Category Offer :</h3>
+
+          <form action="" method="post" onsubmit="return validateCategoryOfferForm()">
+            <input type="hidden" name="categoryId" value="<%= categoriesData._id %>">
+
+            <!-- Category Offer Percentage -->
+            <div style="margin-bottom: 20px;">
+              <label for="categoryOfferPercentage">Enter the category offer percentage:</label>
+              <input type="number" name="categoryOfferPercentage" id="categoryOfferPercentage"  <% if (categoriesData.isCategoryOfferActive) { %> value="<%= categoriesData.categoryOfferPercentage %>" <% } %>> %
+              <span id="categoryOfferPercentageError" class="text-danger"></span>
+            </div>
+
+            <!-- Category Offer Expiry Date -->
+            <div style="margin-bottom: 20px;">
+              <label for="categoryOfferExpiryDate">Enter the category offer expiry date:</label>
+              <input type="date" name="categoryOfferExpiryDate" id="categoryOfferExpiryDate">
+              <span id="categoryOfferExpiryError" class="text-danger"></span>
+            </div>
+
+            <!-- Category Offer Active -->
+            <div style="margin-bottom: 20px;">
+              <label>Make the offer active:</label>
+              <label for="isCategoryOfferActiveYes">Yes</label>
+              <input type="radio" name="isCategoryOfferActive" id="isCategoryOfferActiveYes" value="yes">
+              <label for="isCategoryOfferActiveNo">No</label>
+              <input type="radio" name="isCategoryOfferActive" id="isCategoryOfferActiveNo" value="no">
+              <span id="categoryOfferActiveError" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+              <input type="submit" class="btn" style="background-color: blue; color: #fefefe;" value="Submit">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <script>
+    function validateCategoryOfferForm() {
+      // Clear previous error messages
+      document.getElementById('categoryOfferPercentageError').innerText = '';
+      document.getElementById('categoryOfferExpiryError').innerText = '';
+      document.getElementById('categoryOfferActiveError').innerText = '';
+
+      let isValid = true;
+
+      // Validate Category Offer Percentage
+      const categoryOfferPercentage = document.getElementById('categoryOfferPercentage').value;
+      if (categoryOfferPercentage < 1 || categoryOfferPercentage > 100) {
+        document.getElementById('categoryOfferPercentageError').innerText = 'Offer percentage must be between 1 and 100.';
+        isValid = false;
+      }
+
+      // Validate Category Offer Expiry Date
+      const categoryOfferExpiryDate = document.getElementById('categoryOfferExpiryDate').value;
+      const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+      if (categoryOfferExpiryDate < today) {
+        document.getElementById('categoryOfferExpiryError').innerText = 'Expiry date cannot be in the past.';
+        isValid = false;
+      }
+
+      // Validate Category Offer Active Status
+      const isCategoryOfferActiveYes = document.getElementById('isCategoryOfferActiveYes').checked;
+      const isCategoryOfferActiveNo = document.getElementById('isCategoryOfferActiveNo').checked;
+      if (!isCategoryOfferActiveYes && !isCategoryOfferActiveNo) {
+        document.getElementById('categoryOfferActiveError').innerText = 'Please select whether the offer is active.';
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+
+    function confirmBlock(categoryId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to block this category offer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, block it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "admin_block_category_offer?categoryId=" + categoryId;
+        }
+      });
+    }
+
+    function confirmUnblock(categoryId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to unblock this category offer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, unblock it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "admin_unblock_category_offer?categoryId=" + categoryId;
+        }
+      });
+    }
+
+    function clearErrorMessage() {
+      var errorMessageDiv = document.getElementById('errorMessage');
+      if (errorMessageDiv) {
+        setTimeout(function() {
+          errorMessageDiv.innerHTML = '';
+        }, 5000);
+      }
+    }
+
+    window.onload = clearErrorMessage;
+  </script>
+
+  <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

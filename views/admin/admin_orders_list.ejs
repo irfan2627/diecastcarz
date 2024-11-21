@@ -1,0 +1,227 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Orders List </h2>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <header class="card-header">
+
+                            <div class="row gx-3 align-items-center">
+
+                                <form id="ordersFilterForm" action="/admin/admin_orders_list" method="get"
+                                    class="d-flex justify-content-between">
+
+                                    <div class="col-md-4 col-12 mb-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search term"
+                                                name="ordersListSearch"
+                                                value="<%= ordersListSearch ? ordersListSearch : '' %>">
+                                            <button type="submit" class="btn btn-light bg">
+                                                <i class="material-icons md-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-6 col-md-8">
+                                        <div class="input-group">
+                                            <select id="orderStatusFilter" class="form-select" name="orderStatus">
+                                                <option value="">All</option>
+                                                <option value="Order Placed" <%=orderStatus==='Order Placed'
+                                                    ? 'selected' : '' %>>Order Placed</option>
+                                                <option value="Shipped" <%=orderStatus==='Shipped' ? 'selected' : '' %>
+                                                    >Shipped</option>
+                                                <option value="Delivered" <%=orderStatus==='Delivered' ? 'selected' : ''
+                                                    %>
+                                                    >Delivered</option>
+                                                <option value="Cancelled" <%=orderStatus==='Cancelled' ? 'selected' : ''
+                                                    %>
+                                                    >Cancelled</option>
+                                                <option value="Returned" <%=orderStatus==='Returned' ? 'selected' : ''
+                                                    %>
+                                                    >Returned</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-light bg">
+                                                <i class="material-icons md-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+
+                        </header> <!-- card-header end// -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered text-center">
+                                    <thead class="bg-secondary text-white">
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Username</th>
+                                            <th>Address</th>
+                                            <th>Total</th>
+                                            <th>Products</th>
+                                            <th>Status</th>
+                                            <th>Change Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (allOrders && allOrders.length> 0) { %>
+                                            <% for (let i=0; i < allOrders.length; i++) { %>
+                                                <tr class="<%= i % 2 === 0 ? 'even-row' : 'odd-row' %>">
+                                                    <td class="align-middle">
+                                                        <%= allOrders[i].orderid %>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <%= allOrders[i].orderDate.toLocaleDateString() %>
+                                                    </td>
+                                                    <td class="align-middle"><b>
+                                                            <%= allOrders[i].userId.username %>
+
+                                                        </b></td>
+                                                    <td class="align-middle">
+                                                        <%= allOrders[i].address.firstName %>
+                                                            <%= allOrders[i].address.lastName %>
+                                                                <br>
+                                                                <%= allOrders[i].address.addressLine2 %>,
+                                                                    <%= allOrders[i].address.street %>,
+                                                                        <%= allOrders[i].address.city %>
+                                                                            <br>
+                                                                            <%= allOrders[i].address.state %>
+                                                                                <%= allOrders[i].address.country %>
+                                                                                    <%= allOrders[i].address.zipCode %>
+
+                                                                                        <%= allOrders[i].address.deliveryemail
+                                                                                            %>
+                                                                                            <%= allOrders[i].address.phone
+                                                                                                %>
+                                                    </td>
+                                                    <td class="align-middle">₹<%= allOrders[i].totalPrice %>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul class="list-unstyled">
+                                                            <% for (let j=0; j < allOrders[i].products.length; j++) { %>
+                                                                <li style="margin: 15px;">
+                                                                    <%= allOrders[i].products[j].productName %> &nbsp;
+                                                                        <span style="font-weight: 800;">X<%=
+                                                                                allOrders[i].products[j].quantity %>
+                                                                        </span>
+                                                                </li>
+                                                                <% } %>
+                                                        </ul>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul class="list-unstyled">
+                                                            <% for (let j=0; j < allOrders[i].products.length; j++) { %>
+                                                                <li style="display: flex; align-items: center; justify-content: space-between; margin: 10px 0;">
+                                                                    <span class="badge rounded-pill alert-warning"
+                                                                        style="font-size: 14px; margin: 6px;">
+                                                                        <%= allOrders[i].products[j].productStatus %>
+                                                                    </span>
+                                                                </li>
+                                                                <% } %>
+                                                        </ul>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <ul class="list-unstyled">
+                                                            <% for (let j=0; j < allOrders[i].products.length; j++) { %>
+                                                                <li style="margin: 10px;">
+
+                                                                    <div class="dropdown">
+                                                                        <a href="#" data-bs-toggle="dropdown"
+                                                                            class="btn btn-light rounded btn-sm font-sm" style="border-color: rgb(151, 144, 144);" >
+                                                                            Change Status
+                                                                        </a>
+                                                                        <div class="dropdown-menu">
+                                                                            <a class="dropdown-item"
+                                                                                href="admin_change_order_status?orderId=<%= allOrders[i]._id %>&productId=<%=allOrders[i].products[j]._id %>&productStatus=Order Placed">Order
+                                                                                Placed</a>
+                                                                            <a class="dropdown-item"
+                                                                                href="admin_change_order_status?orderId=<%= allOrders[i]._id %>&productId=<%=allOrders[i].products[j]._id %>&productStatus=Shipped">Shipped</a>
+                                                                            <a class="dropdown-item"
+                                                                                href="admin_change_order_status?orderId=<%= allOrders[i]._id %>&productId=<%=allOrders[i].products[j]._id %>&productStatus=Delivered">Delivered</a>
+                                                                           
+                                                                            <a class="dropdown-item"
+                                                                                href="admin_change_order_status?orderId=<%= allOrders[i]._id %>&productId=<%=allOrders[i].products[j]._id %>&productStatus=Returned">Returned</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <% } %>
+                                                        </ul>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <a href="/admin/admin_individual_order_page?ordersIndividualId=<%= allOrders[i]._id %>"
+                                                            class="btn btn-md rounded font-sm">Order Details</a>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="9" class="text-center"
+                                                                style="font-size: 25px;">No
+                                                                orders available.</td>
+                                                        </tr>
+                                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- card-body end// -->
+                        <style>
+                            .even-row {
+                                background-color: #e0e0e0;
+                                /* Light gray shade */
+                            }
+
+                            .odd-row {
+                                background-color: #fff8f8;
+                                /* White background */
+                            }
+                        </style>
+                        <div class="pagination-area mt-15 mb-50" style="margin-left: 20px;">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-start">
+
+                                    <li class="page-item <%= ordersListCurrentPage === 1 ? 'disabled' : '' %>">
+                                        <a class="page-link" href="?ordersListPage=<%= ordersListCurrentPage - 1 %>">
+                                            <i class="material-icons md-chevron_left"></i>
+                                        </a>
+                                    </li>
+
+                                    <% for (let j=1; j <=ordersListTotalPages; j++) { %>
+                                        <li class="page-item <%= j === ordersListCurrentPage ? 'active' : '' %>">
+                                            <a class="page-link"
+                                                href="?ordersListPage=<%= j %>&ordersListSearch=<%= ordersListSearch %>">
+                                                <%= j %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <li
+                                                class="page-item <%= ordersListCurrentPage === ordersListTotalPages ? 'disabled' : '' %>">
+                                                <a class="page-link"
+                                                    href="?ordersListPage=<%= ordersListCurrentPage + 1 %>">
+                                                    <i class="material-icons md-chevron_right"></i>
+                                                </a>
+                                            </li>
+
+                                </ul>
+                            </nav>
+                        </div>
+                </section>
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

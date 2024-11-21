@@ -1,0 +1,822 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+<div class="screen-overlay"></div>
+
+<%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+<main class="main-wrap">
+  <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+  <section class="content-main">
+    <div class="content-header">
+      <div>
+        <h2 class="content-title card-title">Dashboard </h2>
+        <p>Whole data about your business here</p>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="card card-body mb-4">
+          <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+            <div class="text">
+              <h6 class="mb-1 card-title">Revenue</h6>
+              <span>₹ <%= totalOrdersAmount %></span>
+              <span class="text-sm">
+                Shipping fees are not included
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card card-body mb-4">
+          <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+            <div class="text">
+              <h6 class="mb-1 card-title">Orders</h6> <span><%= totalSalesCount %></span>
+              <span class="text-sm">
+                Excluding orders in transit
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card card-body mb-4">
+          <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_bag"></i></span>
+            <div class="text">
+              <h6 class="mb-1 card-title">Products</h6> <span><%= totalProductsCount %></span>
+              <span class="text-sm">
+                In <%= totalCategoriesCount %> Categories
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card card-body mb-4">
+          <article class="icontext">
+            <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-group"></i></span>
+            <div class="text">
+              <h6 class="mb-1 card-title">Users</h6> <span><%= totalUsersCount %></span>
+              <span class="text-sm">
+                Based in your local time.
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-8 col-lg-12">
+        <div class="card mb-4">
+
+
+
+
+
+          <article class="card-body">
+            <h3 class="card-title mb-0 pb-0 ">Statistics - Users & Orders</h3>
+            <h5>Total Number of User Registrations and Order's Placed.</h5>
+
+            <h6 id="salesStatistics">Current Year Chart Data </h6>
+
+            <!-- <canvas id="myChart" height="120px"></canvas> -->
+
+            <canvas id="monthlyChart" width="600" height="400"></canvas>
+            <canvas id="currentMonthChart" width="600" height="400" style="display: none;"></canvas>
+
+            <canvas id="weeklyChart" width="600" height="400" style="display: none;"></canvas>
+          </article>
+
+          <div style="padding: 10px; margin-left: 10px;">
+            <button class="btn" onclick="showMonthlyChart()" style="color: #088178; border: 1px solid #088178; padding: 5px; margin: 10px ;">
+              Current Year</button>
+            <button class="btn" onclick="showCurrentMonthChart()" style="color: #088178; border: 1px solid #088178; padding: 5px; margin: 10px ;">
+              Current Month</button>
+            <button class="btn" onclick="showWeeklyChart()" style="color: #088178; border: 1px solid #088178; padding: 5px;">
+              Week</button>
+          </div>
+
+
+
+
+
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="card mb-4">
+              <article class="card-body">
+                <h4 class="card-title">Top Selling Brands</h4>
+                <div class="new-member-list">
+
+                  <% if (topSellingCategories.length> 0) {
+                                            for (let i = 0; i < topSellingCategories.length; i++) { %>
+
+
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center">
+                      <img src="/<%= topSellingCategories[i].categoryImage %>" alt="" class="avatar">
+                      <div>
+                        <h6><%= topSellingCategories[i]._id %></h6>
+                        <p class="font-xs text-danger">
+                          <%= topSellingCategories[i].totalQuantity %> Orders
+                        </p>
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <% }  } %>
+
+                  <a href="admin_categories_list" class="view-all-link">
+                    <i class="bi bi-three-dots"></i> View All...
+                  </a>
+
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-lg-9">
+            <div class="card mb-4">
+              <article class="card-body">
+                <h4 class="card-title">Top Selling Products</h4>
+                <div class="new-member-list">
+
+                  <% if (topSellingProducts.length> 0) {
+                                            for (let i = 0; i < 8; i++) { %>
+
+
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center">
+                      <img src="/<%= productsData[i].productImages[0] %>" alt="" class="avatar">
+                      <div>
+
+                        <div class="d-flex " style="max-width: calc(100% - 100px);">
+
+                          <h6 class="text-truncate" style="max-width: calc(100% - 80px);">
+                            <%= topSellingProducts[i].productName %>
+                          </h6>
+                        </div>
+
+
+                        <p> <%= topSellingProducts[i].productDetails[0].category %>
+                        </p>
+                        <p class="font-xs text-danger">
+                          <%= topSellingProducts[i].totalQuantity %> Orders
+                        </p>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <% }  } %>
+
+                  <a href="admin_products_list" class="view-all-link">
+                    <i class="bi bi-three-dots"></i> View All...
+                  </a>
+
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-lg-12">
+
+
+
+
+
+        <div class="card mb-4">
+
+
+
+
+
+          <article class="card-body">
+            <h3 class="card-title  ">Sales statistics</h3>
+
+            <h5 id="salesChart">Year Sales Data </h5>
+
+
+            <canvas id="yearSalesChart" height="450"></canvas>
+            <canvas id="monthSalesChart" height="450" style="display: none;"></canvas>
+
+            <canvas id="weekSalesChart" height="450" style="display: none;"></canvas>
+          </article>
+
+          <div style="padding: 10px; margin-left: 10px;">
+            <button class="btn" onclick="showYearSalesChart()" style="color: #088178; border: 1px solid #088178; padding: 5px; margin: 10px ;">
+              Current Year</button>
+            <button class="btn" onclick="showMonthSalesChart()" style="color: #088178; border: 1px solid #088178; padding: 5px; margin: 10px ;">
+              Current Month</button>
+            <button class="btn" onclick="showWeekSalesChart()" style="color: #088178; border: 1px solid #088178; padding: 5px;">
+              Week</button>
+          </div>
+
+
+
+
+
+        </div>
+
+
+
+        <div class="card mb-4">
+          <article class="card-body">
+            <h4 class="card-title">New Members</h4>
+            <div class="new-member-list">
+
+              <% if (usersData.length> 0) {
+                                            for (let i = 0; i < 4; i++) { %>
+              <% if(!usersData[i].isDeleted) { %>
+
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                  <img src="../public/user_images/<%= usersData[i].image %>" alt="no image" class="avatar">
+                  <div>
+                    <h6><%= usersData[i].username %></h6>
+                    <p class="text-muted font-xs">
+                      <%= usersData[i].email %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <% } } } %>
+
+              <a href="admin_users_list" class="view-all-link">
+                <i class="bi bi-three-dots"></i> View All...
+              </a>
+
+            </div>
+          </article>
+        </div>
+
+        <div class="card mb-4">
+          <article class="card-body">
+            <h4 class="card-title">New Products</h4>
+            <div class="new-member-list">
+
+              <% if (productsData.length> 0) {
+                          for (let i = 0; i < 4; i++) { %>
+              <% if(!productsData[i].isDeleted) { %>
+
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                  <img src="/<%= productsData[i].productImages[0] %>" alt="" class="avatar">
+                  <div>
+                    <h6><%= productsData[i].productName %></h6>
+                    <p class="text-muted font-xs">
+                      <%= productsData[i].category %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+
+              <% } } } %>
+
+              <a href="admin_products_list" class="view-all-link">
+                <i class="bi bi-three-dots"></i> View All...
+              </a>
+
+
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </div>
+    <div class="card mb-4">
+      <header class="card-header">
+        <h4 class="card-title">Latest orders</h4>
+
+      </header>
+      <div class="card-body">
+        <div class="table-responsive">
+          <div class="table-responsive">
+            <table class="table align-middle table-nowrap mb-0">
+              <thead class="table-light">
+                <tr>
+
+                  <th class="align-middle" scope="col">Order ID</th>
+                  <th class="align-middle" scope="col">Date</th>
+                  <th class="align-middle" scope="col">Billing Name</th>
+                  <th class="align-middle" scope="col">Total</th>
+                  <th class="align-middle" scope="col">Order Status</th>
+                  <th class="align-middle" scope="col">Payment Status</th>
+                  <th class="align-middle" scope="col">Payment Method</th>
+                  <th class="align-middle" scope="col">View Details</th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                <% if (ordersData && ordersData.length> 0) { %>
+                <% for (let i=0; i < 6; i++) { %>
+
+                <tr>
+
+                  <td><a href="#" class="fw-bold">#<%= ordersData[i].orderid %></a> </td>
+                  <td>
+                    <%= ordersData[i].orderDate.toLocaleDateString() %>
+                  </td>
+                  <td><%= ordersData[i].userId.username %></td>
+                  <td>
+                    ₹<%= ordersData[i].totalPrice %>
+                  </td>
+                  <td>
+                    <span class="fw-bold"> <%= ordersData[i].orderStatus %> </span>
+
+                  </td>
+                  <td>
+
+                    <%if (ordersData[i].paymentStatus ==='Completed') { %>
+                    <span class="badge badge-pill badge-soft-success"> <%= ordersData[i].paymentStatus %>
+                    </span>
+                    <% }else{ %>
+                    <span class="badge badge-pill badge-soft-warning"> <%= ordersData[i].paymentStatus %>
+                    </span>
+                    <% } %>
+
+                  </td>
+                  <td>
+                    <i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%= ordersData[i].paymentMethod %>
+                  </td>
+                  <td>
+                    <a href="/admin/admin_individual_order_page?ordersIndividualId=<%= ordersData[i]._id %>" class="btn btn-xs"> View details</a>
+                  </td>
+                </tr>
+
+
+                <% }} %>
+
+                <tr>
+                  <td><a href="admin_orders_list">View More...</a></td>
+                </tr>
+
+
+
+              </tbody>
+            </table>
+          </div>
+        </div> <!-- table-responsive end// -->
+      </div>
+    </div>
+
+  </section> <!-- content-main end// -->
+
+
+
+
+  // MAIN CHART
+  <script>
+    function showMonthlyChart() {
+      const monthlyChart = document.getElementById('monthlyChart');
+      const currentMonthChart = document.getElementById('currentMonthChart');
+      const weeklyChart = document.getElementById('weeklyChart');
+      const salesStatistics = document.getElementById('salesStatistics');
+
+      monthlyChart.style.display = 'block';
+      currentMonthChart.style.display = 'none';
+      weeklyChart.style.display = 'none';
+      salesStatistics.innerText = "Current Year Chart Data"
+    }
+
+    function showCurrentMonthChart() {
+      const monthlyChart = document.getElementById('monthlyChart');
+      const currentMonthChart = document.getElementById('currentMonthChart');
+      const weeklyChart = document.getElementById('weeklyChart');
+      const salesStatistics = document.getElementById('salesStatistics');
+
+      monthlyChart.style.display = 'none';
+      currentMonthChart.style.display = 'block';
+      weeklyChart.style.display = 'none';
+      salesStatistics.innerText = "Current Month Chart Data"
+    }
+
+    function showWeeklyChart() {
+      const monthlyChart = document.getElementById('monthlyChart');
+      const currentMonthChart = document.getElementById('currentMonthChart');
+      const weeklyChart = document.getElementById('weeklyChart');
+      const salesStatistics = document.getElementById('salesStatistics');
+
+      monthlyChart.style.display = 'none';
+      currentMonthChart.style.display = 'none';
+      weeklyChart.style.display = 'block';
+      salesStatistics.innerText = "Current Week Chart Data"
+    }
+  </script>
+
+  // weekly data
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fetch weekly data
+      fetch('/admin/admin_weekly_data')
+        .then(response => response.json())
+        .then(data => {
+          console.log("admin_weekly_data recieved");
+
+          var weeklyOrderData = data.weeklyOrderData || [];
+          var weeklyUserData = data.weeklyUserData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = weeklyOrderData.map(order => getDayName(order._id));
+          var orderData = weeklyOrderData.map(order => order.totalOrders);
+
+          var userLabels = [' '];
+          var userData = weeklyUserData.length > 0 ? weeklyUserData.map(user => user.userCount) : [];
+
+          var ctx = document.getElementById('weeklyChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels.concat(userLabels),
+              datasets: [{
+                  label: 'Weekly Order Count',
+                  data: orderData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                },
+                {
+                  label: 'Weekly User Registration',
+                  data: userData,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+      // Function to get day name based on day number
+      function getDayName(dayNumber) {
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        return dayNames[dayNumber - 1] || 'Unknown';
+      }
+    });
+  </script>
+
+  // monthly data
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('/admin/admin_monthly_data')
+        .then(response => response.json())
+        .then(data => {
+          var monthlyOrderData = data.monthlyOrderData || [];
+          var monthlyUserData = data.monthlyUserData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = monthlyOrderData.map(order => getMonthName(order._id));
+          var orderData = monthlyOrderData.map(order => order.totalOrders);
+
+          var userLabels = [' '];
+          var userData = monthlyUserData.length > 0 ? monthlyUserData.map(user => user.userCount) : [];
+
+          var ctx = document.getElementById('monthlyChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels.concat(userLabels),
+              datasets: [{
+                  label: 'Monthly Order Count',
+                  data: orderData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                },
+                {
+                  label: 'Monthly User Registration',
+                  data: userData,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+      // Function to get month name based on month number
+      function getMonthName(monthNumber) {
+        const monthNames = [
+          'January', 'February', 'March', 'April',
+          'May', 'June', 'July', 'August',
+          'September', 'October', 'November', 'December'
+        ];
+
+        return monthNames[monthNumber - 1] || 'Unknown';
+      }
+    });
+  </script>
+
+
+  // current month
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fetch current month data
+      fetch('/admin/admin_current_month_data')
+        .then(response => response.json())
+        .then(data => {
+          console.log("admin_current_month_data received");
+
+          var dailyOrderData = data.dailyOrderData || [];
+          var dailyUserData = data.dailyUserData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = dailyOrderData.map(order => `Day ${order._id}`);
+          var orderData = dailyOrderData.map(order => order.totalOrders);
+
+          var userLabels = [' '];
+          var userData = dailyUserData.length > 0 ? dailyUserData.map(user => user.userCount) : [];
+
+          var ctx = document.getElementById('currentMonthChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels.concat(userLabels),
+              datasets: [{
+                  label: 'Daily Order Count',
+                  data: orderData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                },
+                {
+                  label: 'Daily User Registration',
+                  data: userData,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              plugins: {
+                title: {
+                  display: true,
+                  text: data.currentMonth || "Current Month Data"
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+      // Helper function to format day labels (if needed)
+      function getDayName(day) {
+        return `Day ${day}`;
+      }
+    });
+  </script>
+
+
+
+
+
+  // SALES CHART - SMALL
+
+
+
+  <script>
+    function showYearSalesChart() {
+      console.log("admin_year_sales_chart");
+
+      const yearSalesChart = document.getElementById('yearSalesChart');
+      const monthSalesChart = document.getElementById('monthSalesChart');
+      const weekSalesChart = document.getElementById('weekSalesChart');
+      const salesChart = document.getElementById('salesChart');
+
+      yearSalesChart.style.display = 'block';
+      monthSalesChart.style.display = 'none';
+      weekSalesChart.style.display = 'none';
+      salesChart.innerText = "Year Sales Data"
+    }
+
+    function showMonthSalesChart() {
+      console.log("admin_month_sales_chart");
+
+      const yearSalesChart = document.getElementById('yearSalesChart');
+      const monthSalesChart = document.getElementById('monthSalesChart');
+      const weekSalesChart = document.getElementById('weekSalesChart');
+      const salesChart = document.getElementById('salesChart');
+
+      yearSalesChart.style.display = 'none';
+      monthSalesChart.style.display = 'block';
+      weekSalesChart.style.display = 'none';
+      salesChart.innerText = "Month Sales Data"
+    }
+
+    function showWeekSalesChart() {
+      console.log("admin_week_sales_chart");
+
+      const yearSalesChart = document.getElementById('yearSalesChart');
+      const monthSalesChart = document.getElementById('monthSalesChart');
+      const weekSalesChart = document.getElementById('weekSalesChart');
+      const salesChart = document.getElementById('salesChart');
+
+      yearSalesChart.style.display = 'none';
+      monthSalesChart.style.display = 'none';
+      weekSalesChart.style.display = 'block';
+      salesChart.innerText = "Week Sales Data"
+    }
+  </script>
+
+
+  // week Sales Chart
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fetch weekly data
+      fetch('/admin/admin_week_sales_data')
+        .then(response => response.json())
+        .then(data => {
+          console.log("admin_week_sales_data recieved");
+
+          var weeklyOrderData = data.weeklyOrderData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = weeklyOrderData.map(order => getDayName(order._id));
+          var orderData = weeklyOrderData.map(order => order.totalWeeklyPrice);
+
+
+          var ctx = document.getElementById('weekSalesChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels,
+              datasets: [{
+                label: 'Weekly Order Data',
+                data: orderData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data in admin_week_sales_data :', error));
+
+      // Function to get day name based on day number
+      function getDayName(dayNumber) {
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        return dayNames[dayNumber - 1] || 'Unknown';
+      }
+    });
+  </script>
+
+
+  // month sales Data
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fetch current month data
+      fetch('/admin/admin_month_sales_data')
+        .then(response => response.json())
+        .then(data => {
+          console.log("admin_month_sales_data received");
+
+          var dailyOrderData = data.dailyOrderData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = dailyOrderData.map(order => `Day ${order._id}`);
+          var orderData = dailyOrderData.map(order => order.totalDailyPrice);
+
+          var ctx = document.getElementById('monthSalesChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels,
+              datasets: [{
+                  label: 'Daily Order Data',
+                  data: orderData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                },
+
+              ]
+            },
+            options: {
+              plugins: {
+                title: {
+                  display: true,
+                  text: data.currentMonth || "Current Month Data"
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data in admin_month_sales_data:', error));
+
+      // Helper function to format day labels (if needed)
+      function getDayName(day) {
+        return `Day ${day}`;
+      }
+    });
+  </script>
+
+
+
+
+  // year sales chart
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('/admin/admin_year_sales_data')
+        .then(response => response.json())
+        .then(data => {
+          console.log("admin_year_sales_data received");
+
+          var monthlyOrderData = data.monthlyOrderData || [];
+
+          // Extract data from the fetched JSON
+          var orderLabels = monthlyOrderData.map(order => getMonthName(order._id));
+          var orderData = monthlyOrderData.map(order => order.totalMonthlyPrice);
+
+
+          var ctx = document.getElementById('yearSalesChart').getContext('2d');
+          var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: orderLabels,
+              datasets: [{
+                  label: 'Monthly Order Data',
+                  data: orderData,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                },
+
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching data in admin_year_sales_data:', error));
+
+      // Function to get month name based on month number
+      function getMonthName(monthNumber) {
+        const monthNames = [
+          'January', 'February', 'March', 'April',
+          'May', 'June', 'July', 'August',
+          'September', 'October', 'November', 'December'
+        ];
+
+        return monthNames[monthNumber - 1] || 'Unknown';
+      }
+    });
+  </script>
+
+
+
+
+  <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

@@ -1,0 +1,146 @@
+<%- include("../layouts/user_layouts/user_header.ejs") -%>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <%- include("../layouts/user_layouts/user_topnav.ejs") -%>
+
+
+
+
+        <main class="main">
+
+            <section class="pt-100 pb-150">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 m-auto">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div
+                                        class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                        <div class="padding_eight_all bg-white">
+                                            <div class="heading_s1">
+                                                <h3 class="mb-30">Login</h3>
+                                            </div>
+
+
+                                            <form id="loginForm" method="post">
+
+                                                <div class="form-group">
+                                                    <label for="username" class="form-label">User Name</label>
+                                                    <input type="text" name="email" id="email" placeholder="Your Email"
+                                                        value="user7@gmail.com">
+                                                    <span class="error-message" id="emailError"
+                                                        style="color: red;"></span>
+
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password" class="form-label">User
+                                                        Password</label>
+                                                    <input type="password" name="password" id="password"
+                                                        placeholder="Password" value="user7">
+                                                    <span class="error-message" id="passwordError"
+                                                        style="color: red;"></span>
+
+                                                </div>
+
+                                                <div class="login_footer form-group">
+                                                    <div class="chek-form">
+                                                        <div class="custome-checkbox">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="checkbox" id="exampleCheckbox1" value="">
+                                                            <label class="form-check-label"
+                                                                for="exampleCheckbox1"><span>Remember
+                                                                    me</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <a class="text-muted" href="/user_forgot_password">Forgot
+                                                        password?</a>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                        name="login">Log in</button>
+                                                </div>
+
+                                                <a href="/register"><span>New Here? Create Account?</span></a>
+
+                                            </form>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1"></div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <%- include("../layouts/user_layouts/user_footer.ejs") -%>
+
+
+            <script>
+
+                document.addEventListener("DOMContentLoaded", function () {
+      <% if (typeof message !== 'undefined') { %>
+                        Swal.fire({
+                            icon: '<%= message.type || "info" %>',
+                            title: '<%= message.title || "Alert" %>',
+                            text: "<%= message.text %>",
+
+                        });
+      <% } %>
+    });
+
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const loginForm = document.getElementById('loginForm');
+
+                    loginForm.addEventListener('submit', function (event) {
+                        const emailInput = document.getElementById('email');
+                        const passwordInput = document.getElementById('password');
+
+                        // Reset previous error messages
+                        document.getElementById('emailError').textContent = '';
+                        document.getElementById('passwordError').textContent = '';
+
+                        // Validate email
+                        if (!isValidEmail(emailInput.value)) {
+                            document.getElementById('emailError').textContent = 'Please provide a valid email address.';
+                            event.preventDefault();
+                            return;
+                        }
+
+                        // Validate password
+                        if (!isValidPassword(passwordInput.value)) {
+                            document.getElementById('passwordError').textContent = 'Password must be at least 4 characters long.';
+                            event.preventDefault();
+                            return;
+                        }
+                    });
+
+                    function isValidEmail(email) {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return emailRegex.test(email);
+                    }
+
+                    function isValidPassword(password) {
+                        return password.length >= 4;
+                    }
+                });
+            </script>
+
+
+            <%# <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js">
+                </script>
+
+
+
+                <script src="/public/validators/user_login_validate.js"></script> %>

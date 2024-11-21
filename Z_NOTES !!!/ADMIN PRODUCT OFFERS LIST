@@ -1,0 +1,89 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+    <div class="screen-overlay"></div>
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+        <main class="main-wrap">
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Product Offers </h2>
+                            <p>All offers for the individual products</p>
+                        </div>
+
+                    </div>
+                    <div class="card mb-4">
+
+                        <div class="card-body">
+                            <div class="row gx-3">
+
+
+                                <% if(productsData && productsData.length>0 ) { %>
+
+                                    <% for(let i=0 ; i< productsData.length ; i++) { %>
+
+                                        <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                                            <figure class="card border-1">
+                                                <div class="card-header bg-white text-center">
+                                                    <img class="img-fluid"
+                                                        style="width: 100px; height: 100px; object-fit: contain;"
+                                                        src="/<%= productsData[i].productImages[0] %>" alt="Product Image">
+                                                </div>
+                                                <figcaption class="card-body text-center">
+
+                                                    <h6 class="card-title m-0">
+                                                        <%= productsData[i].productName %> <br>
+
+                                                            <small style="font-size: small; font-weight: 400; "> Brand :
+                                                                <%= productsData[i].category %></small> <br>
+                                                                
+                                                                <small style="font-size: small; font-weight: 400; "> MRP :
+                                                                    ₹<%= productsData[i].regularPrice %></small> <br>
+                                                                    <small style="font-size: small; font-weight: 400; "> Sales Price :
+                                                                        ₹<%= productsData[i].salesPrice %></small> <br>
+
+                                                            
+                                                    </h6>
+                                                    <h8 style="margin: 20px;"> Offer Status:
+                                                        <% if (productsData[i].isProductOfferActive) { %>
+                                                            <span class="badge rounded-pill alert-success">Active</span>
+                                                            <% } else { %>
+                                                                <span
+                                                                    class="badge rounded-pill alert-danger">Inactive</span>
+                                                                <% } %>
+                                                    </h8>
+                                                    <div class="btn hover-up">
+
+                                                        <% if( productsData[i].isProductOfferActive===true) { %>
+
+                                                            <a style="  color: black;"
+                                                                href="/admin/admin_individual_product_offer_page?id=<%= productsData[i]._id %>">
+
+                                                                <span class="badge  alert-success"> Edit
+                                                                    Offer</span>
+                                                            </a>
+                                                            <% } else { %>
+
+                                                                <a style="  color: black;"
+                                                                    href="/admin/admin_individual_product_offer_page?id=<%= productsData[i]._id %>">
+                                                                    <span class="badge  alert-danger"> Add
+                                                                        Offer</span>
+                                                                </a></a>
+                                                                <% } %>
+                                                    </div>
+
+                                                </figcaption>
+                                            </figure>
+
+
+                                        </div>
+                                        <% } %>
+                                            <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

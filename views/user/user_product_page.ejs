@@ -1,0 +1,807 @@
+<%- include("../layouts/user_layouts/user_header.ejs") -%>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<%- include("../layouts/user_layouts/user_topnav.ejs") -%>
+
+
+
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/user_home" rel="nofollow">Home</a>
+        <span></span> Fashion
+        <span></span> Abstract Print Patchwork Dress
+      </div>
+    </div>
+  </div>
+  <section class="mt-50 mb-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="product-detail accordion-detail">
+            <div class="row mb-50">
+              <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="detail-gallery">
+                  <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                  <!-- MAIN SLIDES -->
+                  <div class="product-image-slider">
+
+                    <% if (products.productImages && products.productImages.length> 0) { %>
+                    <% products.productImages.forEach(image=> { %>
+                    <figure class="border-radius-10">
+                      <img src="/<%= image %> " alt="product image" style=" object-fit: contain; ">
+                    </figure>
+                    <% }) %>
+                    <% } else { %>
+                    No Image
+                    <% } %>
+
+
+
+                  </div>
+                  <!-- THUMBNAILS -->
+                  <div class="slider-nav-thumbnails pl-15 pr-15">
+
+                    <% if (products.productImages && products.productImages.length> 0) { %>
+                    <% products.productImages.forEach(image=> { %>
+                    <div><img src="/<%= image %>" alt="product image" style=" object-fit: contain; ">
+                    </div>
+                    <% }) %>
+                    <% } else { %>
+                    No Image
+                    <% } %>
+
+
+                  </div>
+                </div>
+                <!-- End Gallery -->
+              </div>
+
+
+
+              <!-- ------ SCRIPT - Quantity,Cart,Wishlist ------- -->
+
+              <script>
+                let min = 1;
+                let max = 10;
+
+                const products = <%- JSON.stringify(products) %>;
+                let stock = products.quantity
+
+                function validateQuantity() {
+                  const qtyInput = document.getElementById('quantityToUpdate');
+                  const errorMessage = document.getElementById('quantityErrorMessage');
+                  const value = parseInt(qtyInput.value, 10);
+
+                  if (value > stock) {
+                    errorMessage.textContent = `Required quantity exceeds stock quantity ! `;
+                    return false
+                  } else if (value < min || value > max) {
+                    errorMessage.textContent = `Please enter a value between ${min} and ${max}.`;
+                    return false
+                  } else {
+                    errorMessage.textContent = '';
+                    return true
+                  }
+                }
+
+                function decreaseQty(event) {
+                  event.preventDefault();
+                  const qtyInput = document.getElementById('quantityToUpdate');
+                  let currentValue = parseInt(qtyInput.value, 10);
+
+                  if (currentValue > min) {
+                    qtyInput.value = currentValue - 1;
+                    validateQuantity();
+
+                  } else {
+                    document.getElementById('quantityErrorMessage').textContent = `Minimum quantity is ${min}`;
+                  }
+                }
+
+                function increaseQty(event) {
+                  event.preventDefault();
+                  const qtyInput = document.getElementById('quantityToUpdate');
+                  let currentValue = parseInt(qtyInput.value, 10);
+
+                  if (currentValue < max) {
+                    qtyInput.value = currentValue + 1;
+                    validateQuantity();
+
+                  } else {
+                    document.getElementById('quantityErrorMessage').textContent = `Maximum quantity is ${max}`;
+                  }
+                }
+
+
+
+                async function addToCart(productId, productName) {
+                  try {
+
+                    if (!validateQuantity()) {
+                      return; // Do not proceed if quantity is invalid
+                    }
+
+                    var quantity = document.getElementById('quantityToUpdate').value;
+                    const response = await fetch(`/user_cart?productId=${productId}&qty=${quantity}`, {
+                      method: 'POST'
+                    });
+
+                    if (!response.ok) {
+                      throw new Error("Error adding product to cart");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                      addToCartNotification(productName, `is added to cart (Quantity: ${quantity})`);
+                    } else {
+                      console.error("Error adding product to cart", data.message);
+                    }
+                  } catch (error) {
+                    console.error("Error adding product to cart", error);
+                  }
+                }
+
+                function addToCartNotification(productName, action) {
+                  Toastify({
+                    text: `"${productName}"   ${action}`,
+                    duration: 2000,
+                    backgroundColor: "#283745",
+                    position: 'right',
+                  }).showToast();
+
+                }
+
+                async function addToWishlist(productId, productName) {
+                  try {
+
+                    const response = await fetch(`/user_wishlist?productId=${productId}`, {
+                      method: 'POST'
+                    });
+
+                    if (!response.ok) {
+                      throw new Error("Error adding product to wishlist");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                      addToWishlistNotification(productName, `is added to wishlist`);
+                    } else {
+                      console.error("Error adding product to wishlist", data.message);
+                    }
+                  } catch (error) {
+                    console.error("Error adding product to wishlist", error);
+                  }
+                }
+
+                function addToWishlistNotification(productName, action) {
+                  Toastify({
+                    text: `"${productName}"   ${action}`,
+                    duration: 2000,
+                    backgroundColor: "#289743",
+                    position: 'right',
+                  }).showToast();
+
+                }
+
+                function changeButtonText(click) {
+                  click.innerText = 'Added to cart';
+                  click.style.fontSize = '20px';
+                  click.style.color = 'yellow';
+                }
+              </script>
+
+              <!-- ^^^^^^^ SCRIPT - Quantity,Cart,Wishlist ^^^^^^^ -->
+
+
+              <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="detail-info">
+                  <h2 class="title-detail">
+                    <%= products.productName %>
+                  </h2>
+                  <div class="product-detail-rating">
+                    <div class="pro-details-brand">
+                      <span> Brands: <a href="/user_shop_page?categoryName=<%= products.category %>">
+                          <%= products.category %>
+                        </a></span>
+                    </div>
+                    <div class="product-rate-cover text-end">
+                      <div class="product-rate d-inline-block">
+                        <div class="product-rating" style="width:90%">
+                        </div>
+                      </div>
+                      <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                    </div>
+                  </div>
+                  <div class="clearfix product-price-cover">
+                    <div class="product-price primary-color float-left">
+                      <ins><span class="text-brand">
+                          ₹<%= products.salesPrice %>
+                        </span></ins>
+                      <ins><span class="old-price font-md ml-15">
+                          ₹<%= products.regularPrice %>
+                        </span></ins>
+
+                        <% if(products.isProductOfferActive===true && products.productOfferPercentage>0){ %>
+                      <span class="save-price  font-md color3 ml-15"><%= products.productOfferPercentage %>% Off</span>
+                      <% } %>
+
+                    </div>
+                  </div>
+                  <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                  <div class="short-desc mb-30">
+                    <p>
+                      <%= products.description %>
+                    </p>
+                  </div>
+                  <div class="product_sort_info font-xs mb-30">
+                    <ul>
+                      <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year
+                        Brand Warranty</li>
+                      <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 15 Day Return
+                        Policy</li>
+                      <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery
+                        available</li>
+                    </ul>
+                  </div>
+
+                  <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+
+                  <div class="detail-extralink" style="display: flex; flex-direction: column; gap: 1rem;">
+
+                    <div class="quantity-container" style="display: flex; align-items: center;">
+
+                      <label for="qty" style="margin-right: 10px;">Quantity:</label>
+
+                      <a href="#" class="qty-down btn btn-outline-primary" onclick="decreaseQty(event)" style="padding: 7px; border-radius: 4px 0 0 4px;">
+                        <i>-</i>
+                      </a>
+
+                      <input type="number" name="qty" id="quantityToUpdate" style="padding: 5px; width: 8%; height:auto;  text-align: center; border: 1px solid #ced4da; border-radius: 0;" min="1" max="10" value="1" step="1" title="Quantity:" class="input-text qty" oninput="validateQuantity()">
+
+                      <a href="#" class="qty-up btn btn-outline-primary" onclick="increaseQty(event)" style="padding: 7px; border-radius: 0 4px 4px 0;">
+                        <i>+</i>
+                      </a>
+
+                      <label id="quantityErrorMessage" style="color: red; font-size: 14px; margin-left: 10px; white-space: nowrap;"></label>
+                    </div>
+
+
+                    <div class="product-extra-link2 d-flex align-items-center ">
+
+                      <a href="#" style="width: auto" onclick="addToCart('<%= products._id %>','<%= products.productName %>' )">
+                        <button type="submit" class="button button-add-to-cart  d-flex align-items-center" style="height: 40px; font-size: 18px " onclick="changeButtonText(this)">Add to
+                          cart</button>
+                      </a>
+
+                      <a href="#" aria-label="Add To Wishlist" class="action-btn hover-up" onclick="addToWishlist('<%= products._id %>','<%= products.productName %>' )">
+                        <i class="fi-rs-heart"></i>
+                      </a>
+
+                      <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+
+                    </div>
+
+
+                  </div>
+
+
+
+                  <ul class="product-meta font-xs color-grey mt-50">
+                    <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+
+
+
+                    <li>Availability:<span class="in-stock text-success ml-5">
+                        <% if (products.quantity> 0) { %>
+
+                        <%= products.quantity %> Items In
+                        Stock
+                      </span></li>
+
+                    <% }else{ %> <span style="font-size: large; color: red;">Out of
+                      Stock !
+                    </span>
+                    <% } %>
+
+
+
+                  </ul>
+                </div>
+                <!-- Detail Info -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-10 m-auto entry-main-content">
+                <h2 class="section-title style-1 mb-30">Description</h2>
+                <div class="description mb-50">
+                  <p>
+                    <%= products.description %>
+                  </p>
+                  <ul class="product-more-infor mt-30">
+                    <li><span>Model</span>
+                      <%= products.model %>
+                    </li>
+                    <li><span>Brand</span>
+                      <%= products.brand %>
+                    </li>
+
+                    <li><span>Scale</span>
+                      <%= products.scale %>
+                    </li>
+                    <li><span>Material</span> Metal, Plastic</li>
+                    <li><span>Color</span>
+                      <%= products.colour %>
+                    </li>
+                    <li><span>Quantity Per Case</span> 1</li>
+                    <li><span>Type Of Packing</span> Carton</li>
+
+                  </ul>
+                  <hr class="wp-block-separator is-style-dots">
+                  <p>Laconic overheard dear woodchuck wow this outrageously taut beaver
+                    hey
+                    hello far meadowlark imitatively egregiously hugged that yikes
+                    minimally
+                    unanimous pouted flirtatiously as beaver beheld above forward
+                    energetic across this jeepers beneficently cockily less a the
+                    raucously
+                    that magic upheld far so the this where crud then below after jeez
+                    enchanting drunkenly more much wow callously irrespective limpet.
+                  </p>
+                  <h4 class="mt-30">Packaging & Delivery</h4>
+                  <hr class="wp-block-separator is-style-wide">
+                  <p>Less lion goodness that euphemistically robin expeditiously bluebird
+                    smugly scratched far while thus cackled sheepishly rigid after due
+                    one
+                    assenting regarding censorious while occasional or this more crane
+                    went more as this less much amid overhung anathematic because much
+                    held
+                    one exuberantly sheep goodness so where rat wry well concomitantly.
+                  </p>
+                  <p>Scallop or far crud plain remarkably far by thus far iguana lewd
+                    precociously and and less rattlesnake contrary caustic wow this near
+                    alas and next and pled the yikes articulate about as less cackled
+                    dalmatian
+                    in much less well jeering for the thanks blindly sentimental
+                    whimpered
+                    less across objectively fanciful grimaced wildly some wow and rose
+                    jeepers outgrew lugubrious luridly irrationally attractively
+                    dachshund.
+                  </p>
+                </div>
+                <h3 class="section-title style-1 mb-30">Additional info</h3>
+                <table class="font-md mb-30">
+                  <tbody>
+                    <tr class="stand-up">
+                      <th>Stand Up</th>
+                      <td>
+                        <p>35″L x 24″W x 37-45″H(front to back wheel)</p>
+                      </td>
+                    </tr>
+                    <tr class="folded-wo-wheels">
+                      <th>Folded (w/o wheels)</th>
+                      <td>
+                        <p>32.5″L x 18.5″W x 16.5″H</p>
+                      </td>
+                    </tr>
+                    <tr class="folded-w-wheels">
+                      <th>Folded (w/ wheels)</th>
+                      <td>
+                        <p>32.5″L x 24″W x 18.5″H</p>
+                      </td>
+                    </tr>
+                    <tr class="door-pass-through">
+                      <th>Door Pass Through</th>
+                      <td>
+                        <p>24</p>
+                      </td>
+                    </tr>
+                    <tr class="frame">
+                      <th>Frame</th>
+                      <td>
+                        <p>Aluminum</p>
+                      </td>
+                    </tr>
+                    <tr class="weight-wo-wheels">
+                      <th>Weight (w/o wheels)</th>
+                      <td>
+                        <p>20 LBS</p>
+                      </td>
+                    </tr>
+                    <tr class="weight-capacity">
+                      <th>Weight Capacity</th>
+                      <td>
+                        <p>60 LBS</p>
+                      </td>
+                    </tr>
+                    <tr class="width">
+                      <th>Width</th>
+                      <td>
+                        <p>24″</p>
+                      </td>
+                    </tr>
+                    <tr class="handle-height-ground-to-handle">
+                      <th>Handle height (ground to handle)</th>
+                      <td>
+                        <p>37-45″</p>
+                      </td>
+                    </tr>
+                    <tr class="wheels">
+                      <th>Wheels</th>
+                      <td>
+                        <p>12″ air / wide track slick tread</p>
+                      </td>
+                    </tr>
+                    <tr class="seat-back-height">
+                      <th>Seat back height</th>
+                      <td>
+                        <p>21.5″</p>
+                      </td>
+                    </tr>
+                    <tr class="head-room-inside-canopy">
+                      <th>Head room (inside canopy)</th>
+                      <td>
+                        <p>25″</p>
+                      </td>
+                    </tr>
+                    <tr class="pa_color">
+                      <th>Color</th>
+                      <td>
+                        <p>
+                          <%= products.colour %>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr class="pa_size">
+                      <th>Scale</th>
+                      <td>
+                        <p>
+                          <%= products.scale %>
+                        </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="social-icons single-share">
+                  <ul class="text-grey-5 d-inline-block">
+                    <li><strong class="mr-10">Share this:</strong></li>
+                    <li class="social-facebook"><a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    </li>
+                    <li class="social-twitter"> <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    </li>
+                    <li class="social-instagram"><a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    </li>
+                    <li class="social-linkedin"><a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    </li>
+                  </ul>
+                </div>
+                <h3 class="section-title style-1 mb-30 mt-30">Reviews (3)</h3>
+                <!--Comments-->
+                <div class="comments-area style-2">
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <h4 class="mb-30">Customer questions & answers</h4>
+                      <div class="comment-list">
+                        <div class="single-comment justify-content-between d-flex">
+                          <div class="user justify-content-between d-flex">
+                            <div class="thumb text-center">
+                              <img src="assets/imgs/page/avatar-6.jpg" alt="">
+                              <h6><a href="#">Jacky Chan</a></h6>
+                              <p class="font-xxs">Since 2012</p>
+                            </div>
+                            <div class="desc">
+                              <div class="product-rate d-inline-block">
+                                <div class="product-rating" style="width:90%">
+                                </div>
+                              </div>
+                              <p>Thank you very fast shipping from Poland only
+                                3days.</p>
+                              <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                  <p class="font-xs mr-30">December 4,
+                                    2020 at
+                                    3:12 pm </p>
+                                  <a href="#" class="text-brand btn-reply">Reply
+                                    <i class="fi-rs-arrow-right"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--single-comment -->
+                        <div class="single-comment justify-content-between d-flex">
+                          <div class="user justify-content-between d-flex">
+                            <div class="thumb text-center">
+                              <img src="assets/imgs/page/avatar-7.jpg" alt="">
+                              <h6><a href="#">Ana Rosie</a></h6>
+                              <p class="font-xxs">Since 2008</p>
+                            </div>
+                            <div class="desc">
+                              <div class="product-rate d-inline-block">
+                                <div class="product-rating" style="width:90%">
+                                </div>
+                              </div>
+                              <p>Great low price and works well.</p>
+                              <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                  <p class="font-xs mr-30">December 4,
+                                    2020 at
+                                    3:12 pm </p>
+                                  <a href="#" class="text-brand btn-reply">Reply
+                                    <i class="fi-rs-arrow-right"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--single-comment -->
+                        <div class="single-comment justify-content-between d-flex">
+                          <div class="user justify-content-between d-flex">
+                            <div class="thumb text-center">
+                              <img src="assets/imgs/page/avatar-8.jpg" alt="">
+                              <h6><a href="#">Steven Keny</a></h6>
+                              <p class="font-xxs">Since 2010</p>
+                            </div>
+                            <div class="desc">
+                              <div class="product-rate d-inline-block">
+                                <div class="product-rating" style="width:90%">
+                                </div>
+                              </div>
+                              <p>Authentic and Beautiful, Love these way more
+                                than
+                                ever expected They are Great earphones</p>
+                              <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                  <p class="font-xs mr-30">December 4,
+                                    2020 at
+                                    3:12 pm </p>
+                                  <a href="#" class="text-brand btn-reply">Reply
+                                    <i class="fi-rs-arrow-right"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--single-comment -->
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <h4 class="mb-30">Customer reviews</h4>
+                      <div class="d-flex mb-30">
+                        <div class="product-rate d-inline-block mr-15">
+                          <div class="product-rating" style="width:90%">
+                          </div>
+                        </div>
+                        <h6>4.8 out of 5</h6>
+                      </div>
+                      <div class="progress">
+                        <span>5 star</span>
+                        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%
+                        </div>
+                      </div>
+                      <div class="progress">
+                        <span>4 star</span>
+                        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%
+                        </div>
+                      </div>
+                      <div class="progress">
+                        <span>3 star</span>
+                        <div class="progress-bar" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%
+                        </div>
+                      </div>
+                      <div class="progress">
+                        <span>2 star</span>
+                        <div class="progress-bar" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%
+                        </div>
+                      </div>
+                      <div class="progress mb-30">
+                        <span>1 star</span>
+                        <div class="progress-bar" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%
+                        </div>
+                      </div>
+                      <a href="#" class="font-xs text-muted">How are ratings
+                        calculated?</a>
+                    </div>
+                  </div>
+                </div>
+                <!--comment form-->
+                <div class="comment-form">
+                  <h4 class="mb-15">Add a review</h4>
+                  <div class="product-rate d-inline-block mb-30">
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-8 col-md-12">
+                      <form class="form-contact comment_form" action="#" id="commentForm">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9" placeholder="Write Comment"></textarea>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <input class="form-control" name="name" id="name" type="text" placeholder="Name">
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <input class="form-control" name="email" id="email" type="email" placeholder="Email">
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="form-group">
+                              <input class="form-control" name="website" id="website" type="text" placeholder="Website">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <button type="submit" class="button button-contactForm">Submit
+                            Review</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-60">
+              <div class="col-12">
+                <h3 class="section-title style-1 mb-30">Related products</h3>
+              </div>
+              <div class="col-12">
+                <div class="row related-products">
+                  <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                    <div class="product-cart-wrap small hover-up">
+                      <div class="product-img-action-wrap">
+                        <div class="product-img product-img-zoom">
+                          <a href="shop-product-right.html" tabindex="0">
+                            <img class="default-img" src="assets/imgs/shop/product-2-1.jpg" alt="">
+                            <img class="hover-img" src="assets/imgs/shop/product-2-2.jpg" alt="">
+                          </a>
+                        </div>
+                        <div class="product-action-1">
+                          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
+"><i class="fi-rs-search"></i></a>
+                          <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                          <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                        </div>
+                        <div class="product-badges product-badges-position product-badges-mrg">
+                          <span class="hot">Hot</span>
+                        </div>
+                      </div>
+                      <div class="product-content-wrap">
+                        <h2><a href="shop-product-right.html" tabindex="0">Ulstra
+                            Bass
+                            Headphone</a></h2>
+                        <div class="rating-result" title="90%">
+                          <span>
+                          </span>
+                        </div>
+                        <div class="product-price">
+                          <span>$238.85 </span>
+                          <span class="old-price">$245.8</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                    <div class="product-cart-wrap small hover-up">
+                      <div class="product-img-action-wrap">
+                        <div class="product-img product-img-zoom">
+                          <a href="shop-product-right.html" tabindex="0">
+                            <img class="default-img" src="assets/imgs/shop/product-3-1.jpg" alt="">
+                            <img class="hover-img" src="assets/imgs/shop/product-4-2.jpg" alt="">
+                          </a>
+                        </div>
+                        <div class="product-action-1">
+                          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
+"><i class="fi-rs-search"></i></a>
+                          <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                          <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                        </div>
+                        <div class="product-badges product-badges-position product-badges-mrg">
+                          <span class="sale">-12%</span>
+                        </div>
+                      </div>
+                      <div class="product-content-wrap">
+                        <h2><a href="shop-product-right.html" tabindex="0">Smart
+                            Bluetooth Speaker</a></h2>
+                        <div class="rating-result" title="90%">
+                          <span>
+                          </span>
+                        </div>
+                        <div class="product-price">
+                          <span>$138.85 </span>
+                          <span class="old-price">$145.8</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                    <div class="product-cart-wrap small hover-up">
+                      <div class="product-img-action-wrap">
+                        <div class="product-img product-img-zoom">
+                          <a href="shop-product-right.html" tabindex="0">
+                            <img class="default-img" src="assets/imgs/shop/product-4-1.jpg" alt="">
+                            <img class="hover-img" src="assets/imgs/shop/product-4-2.jpg" alt="">
+                          </a>
+                        </div>
+                        <div class="product-action-1">
+                          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
+"><i class="fi-rs-search"></i></a>
+                          <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                          <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                        </div>
+                        <div class="product-badges product-badges-position product-badges-mrg">
+                          <span class="new">New</span>
+                        </div>
+                      </div>
+                      <div class="product-content-wrap">
+                        <h2><a href="shop-product-right.html" tabindex="0">HomeSpeak
+                            12UEA Goole</a></h2>
+                        <div class="rating-result" title="90%">
+                          <span>
+                          </span>
+                        </div>
+                        <div class="product-price">
+                          <span>$738.85 </span>
+                          <span class="old-price">$1245.8</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                    <div class="product-cart-wrap small hover-up mb-0">
+                      <div class="product-img-action-wrap">
+                        <div class="product-img product-img-zoom">
+                          <a href="shop-product-right.html" tabindex="0">
+                            <img class="default-img" src="assets/imgs/shop/product-5-1.jpg" alt="">
+                            <img class="hover-img" src="assets/imgs/shop/product-3-2.jpg" alt="">
+                          </a>
+                        </div>
+                        <div class="product-action-1">
+                          <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
+                          <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                          <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                        </div>
+                        <div class="product-badges product-badges-position product-badges-mrg">
+                          <span class="hot">Hot</span>
+                        </div>
+                      </div>
+                      <div class="product-content-wrap">
+                        <h2><a href="shop-product-right.html" tabindex="0">Dadua
+                            Camera
+                            4K 2022EF</a></h2>
+                        <div class="rating-result" title="90%">
+                          <span>
+                          </span>
+                        </div>
+                        <div class="product-price">
+                          <span>$89.8 </span>
+                          <span class="old-price">$98.8</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<%- include("../layouts/user_layouts/user_footer.ejs") -%>

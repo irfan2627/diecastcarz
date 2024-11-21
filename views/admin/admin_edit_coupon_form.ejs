@@ -1,0 +1,174 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title"> Coupons </h2>
+                            <h5>Edit Coupon</h5>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="admin_coupons_list" class="btn btn-primary">View
+                                Coupons</a>
+                        </div>
+                    </div>
+
+
+                    <% if (typeof message !=='undefined' ) { %>
+                        <p style="color: red; font-size: 18px; font-weight: bold;">
+                            <%= message %>
+                        </p>
+                        <% } %>
+
+                            <div class="card mb-3 border-light">
+                                <div class="card-header text-dark bg-light">
+                                    <h6>Edit Coupon :</h6>
+                                </div>
+                                <div class="card-body col-md-10 ">
+                                    <form action="" method="post"
+                                        class="  d-flex flex-wrap justify-content-between align-items-start"
+                                        id="updateForm" onsubmit="return validateForm()">
+
+                                        <div class="form-group col-md-5 mb-3 ">
+                                            <label for="couponCode">Coupon Code:</label>
+                                            <input type="text" class="form-control" id="couponCode" name="couponCode"
+                                                required oninput="this.value = this.value.toUpperCase()"
+                                                value="<%= couponData.couponCode %>">
+                                        </div>
+
+                                        <div class="form-group col-md-5 mb-3 ">
+                                            <label for="couponExpiry">Coupon Expiry:</label>
+                                            <input type="date" class="form-control" id="couponExpiry"
+                                                name="couponExpiry" required
+                                                value="<%= couponData.couponExpiry.toISOString().split('T')[0] %>">
+                                        </div>
+
+                                        <div class="form-group col-md-5 mb-3">
+                                            <label for="discountPercentage">Discount Percentage:</label>
+                                            <input type="number" class="form-control" id="discountPercentage"
+                                                name="discountPercentage" required max="100" min="1"
+                                                value="<%= couponData.discountPercentage %>">
+                                        </div>
+
+
+
+                                        <div class="form-group col-md-5 mb-3">
+                                            <label for="minimumAmount">Minimum Amount To Use Coupon:</label>
+                                            <input type="number" class="form-control" id="minimumAmount"
+                                                name="minimumAmount" required min="1"
+                                                value="<%= couponData.minimumAmount %>">
+                                        </div>
+
+                                        <div class="form-group col-md-5 mb-3">
+                                            <label for="maximumAmount">Maximum Discount Amount:</label>
+                                            <input type="number" class="form-control" id="maximumAmount"
+                                                name="maximumAmount" required min="1"
+                                                value="<%= couponData.maximumAmount %>">
+                                        </div>
+
+                                        <div class="form-group col-md-5 mb-3">
+                                            <label for="maxUsesPerUser">Max Uses Per User:</label>
+                                            <input type="number" class="form-control" id="maxUsesPerUser"
+                                                name="maxUsesPerUser" min="1" value="<%= couponData.maxUsesPerUser %>">
+                                        </div>
+
+
+                                        <div class="col-md-12 mt-3">
+                                            <button type="submit" class="btn btn-success">Update Coupon</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="modal-footer justify-content-between mt-3">
+                                        <div>
+                                            <p id="validationMessages" class="text-danger"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                </section> <!-- content-main end// -->
+
+
+
+
+
+                <script>
+
+
+                    function validateForm() {
+
+                        var validationMessages = '';
+
+                        if (!$('#couponCode').val().trim()) {
+                            validationMessages += 'Coupon Code cannot be empty.';
+                        }
+
+                        if (!$('#discountPercentage').val().trim()) {
+                            validationMessages += 'Discount Percentage cannot be empty.';
+                        }
+                        if (!$('#minimumAmount').val().trim()) {
+                            validationMessages += 'Minimum amount cannot be empty.';
+                        }
+                        if (!$('#maximumAmount').val().trim()) {
+                            validationMessages += 'Maximum amount cannot be empty.';
+                        }
+                        if (!$('#maxUsesPerUser').val().trim()) {
+                            validationMessages += 'Maximum uses per user cannot be empty.';
+                        }
+
+                        if (parseInt($('#discountPercentage').val()) > 100) {
+                            validationMessages += 'Discount Percentage cannot be greater than 100.  ';
+                        }
+
+                        if (parseInt($('#minimumAmount').val()) < 1) {
+                            validationMessages += 'Minimum amount should be greater than 1. ';
+                        }
+
+                        if (parseInt($('#maximumAmount').val()) < 1) {
+                            validationMessages += 'Maximum amount should be greater than 1. ';
+                        }
+
+                        if (parseInt($('#maxUsesPerUser').val()) < 0) {
+                            validationMessages += 'Maximum uses per user should be greater than 1.  ';
+                        }
+
+                        if (validationMessages) {
+                            $('#validationMessages').text(validationMessages);
+                            return false;
+                        } else {
+                            // If valid, show SweetAlert for confirmation
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "Do you want to Update this Coupon?",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, Update it!',
+                                cancelButtonText: 'No, cancel!',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // If confirmed, submit the form
+                                    document.getElementById('updateForm').submit();
+                                }
+                            });
+                            return false; // Prevent form submission until user confirms
+                        }
+                    }
+
+                </script>
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

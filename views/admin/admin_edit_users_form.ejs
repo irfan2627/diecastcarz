@@ -1,0 +1,220 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="content-header">
+                                <h2 class="content-title">Edit User <%= user.username %>
+                                </h2>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h4>Details</h4>
+                                </div>
+                                <div class="card-body">
+
+                                    <form action="" method="post" onsubmit="return validateForm()"
+                                        enctype="multipart/form-data">
+
+                                        <input type="hidden" name="user_id" value="<%= user._id %>" id="">
+
+
+                                        <div class="mb-4">
+                                            <label for="username" class="form-label">User Name</label>
+                                            <input type="text" placeholder="Enter Name" value="<%= user.username %>"
+                                                class="form-control" name="username" id="username">
+                                            <p id="usernameM" style="color: red;"></p>
+
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="email" class="form-label">User Email-Id</label>
+                                            <input type="email" placeholder="Enter Email" value="<%= user.email%>"
+                                                class="form-control" name="email" id="email">
+                                            <p id="emailM" style="color: red;"></p>
+
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="mobile" class="form-label">User Mobile No.</label>
+                                            <input type="mobile" placeholder="Enter Mobile Number"
+                                                value="<%= user.mobile %>" class="form-control" name="mobile"
+                                                id="mobile">
+                                            <p id="mobileM" style="color: red;"></p>
+
+                                        </div>
+
+
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <h4>User Profile Picture</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="input-upload">
+
+                                                    <% if (user.image) { %>
+                                                        <div class="uploaded-image-container" style="margin-bottom: 15px;">
+                                                            <img src="../public/user_images/<%= user.image %>" alt="User Profile Image"
+                                                                style="max-width: 100px; height: auto; display: block;" />
+                                                        </div>
+                                                    <% } %>
+                                        
+                                                    <div class="mb-3">
+                                                        <label for="image" style="display: block; text-align: left;">Edit Your Profile Image:</label>
+                                                    </div>
+                                                    <div>
+                                                        <input type="file" class="form-control" name="image" id="image">
+                                                    </div>
+                                                </div>
+                                        
+                                                <p id="imageMessage" style="color: red;"></p>
+                                        
+                                                <div id="imagePreviewContainer" style="width: 100%; margin-top: 10px;">
+                                                     <!-- Preview images will be inserted here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+
+                                        <div class="card">
+                                            <input type="submit" value="Update User Profile"
+                                                class="btn btn-md rounded font-sm hover-up btn-success float-right">
+                                        </div>
+
+                                    </form>
+
+                                    <% if (typeof message !=='undefined' ) { %>
+                                        <p>
+                                            <%= message %>
+                                        </p>
+                                        <% } %>
+                                </div>
+                            </div> <!-- card end// -->
+                        </div>
+                    </div>
+                </section> <!-- content-main end// -->
+
+
+
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
+
+
+                    <script>
+                        // form upload image preview
+
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            let filesList = []; // To maintain the list of files to upload
+
+                            document.getElementById('image').addEventListener('change', function (event) {
+                                filesList = Array.from(event.target.files); // Store the selected files in the array
+
+                                // Remove existing images in the preview container
+                                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                                while (imagePreviewContainer.firstChild) {
+                                    imagePreviewContainer.removeChild(imagePreviewContainer.firstChild);
+                                }
+
+                                // Add images to the preview and attach the close event
+                                filesList.forEach(function (file, index) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+
+                                        var imageContainer = document.createElement('div');
+                                        imageContainer.classList.add('uploaded-image-container');
+
+                                        var img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        img.style.maxWidth = '100px';
+                                        img.style.height = 'auto';
+                                        img.alt = 'Uploaded Image';
+                                        img.classList.add('uploaded-image');
+
+                                        var closeButton = document.createElement('div');
+                                        closeButton.classList.add('close-icon');
+                                        closeButton.innerHTML = '&#10006;';
+                                        closeButton.style.cursor = 'default';
+
+                                        // Remove the image from the preview and from the filesList array
+                                        closeButton.addEventListener('click', function () {
+                                            filesList.splice(index, 1); // Remove the file from the array
+                                            imageContainer.remove(); // Remove the preview
+
+                                            // Update the file input with the new file list
+                                            const dataTransfer = new DataTransfer();
+                                            filesList.forEach(file => dataTransfer.items.add(file));
+                                            document.getElementById('image').files = dataTransfer.files;
+                                        });
+
+                                        imageContainer.appendChild(img);
+                                        imageContainer.appendChild(closeButton);
+                                        imagePreviewContainer.appendChild(imageContainer);
+                                    };
+
+                                    reader.readAsDataURL(file);
+                                });
+                            });
+                        });
+
+
+
+
+
+                        function validateForm() {
+
+                            var username = document.getElementById('username').value;
+                            var email = document.getElementById('email').value;
+                            var mobile = document.getElementById('mobile').value;
+
+
+                            if (username.trim() === '') {
+                                document.getElementById('usernameM').innerText = 'username name cannot be empty';
+                                return false;
+                            } else {
+                                document.getElementById('usernameM').innerText = '';
+                            }
+
+                            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
+                            if (email.trim() === '') {
+                                document.getElementById('emailM').innerText = 'Email cannot be empty';
+                                return false;
+                            } else if (!emailRegex.test(email)) {
+                                document.getElementById('emailM').innerText = 'Invalid Email format';
+                                return false;
+                            } else {
+                                document.getElementById('emailM').innerText = '';
+                            }
+
+                            var mobileRegex = /^\d+$/;
+                            if (mobile.trim() === '') {
+                                document.getElementById('mobileM').innerText = 'Mobile cannot be empty';
+                                return false;
+                            } else if (!mobileRegex.test(mobile)) {
+                                document.getElementById('mobileM').innerText = 'Invalid mobile number format';
+                                return false;
+                            } else if (mobile.length !== 10) {
+                                document.getElementById('mobileM').innerText = 'Mobile number should be 10 digits long';
+                                return false;
+                            } else {
+                                document.getElementById('mobileM').innerText = '';
+                            }
+
+
+
+                            return true
+
+                        }
+
+
+                    </script>

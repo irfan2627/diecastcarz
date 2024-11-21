@@ -1,0 +1,183 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+<div class="screen-overlay"></div>
+
+<%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+<main class="main-wrap">
+
+  <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+  <section class="content-main">
+    <div class="content-header">
+      <div>
+        <h2 class="content-title card-title">Coupons </h2>
+        <h5>Add New Coupons</h5>
+      </div>
+      <div class="d-flex justify-content-end mt-3">
+        <a href="admin_coupons_list" class="btn btn-primary">View
+          Coupons</a>
+      </div>
+    </div>
+
+
+    <% if (typeof message !=='undefined' ) { %>
+    <p style="color: red; font-size: 18px; font-weight: bold;">
+      <%= message %>
+    </p>
+    <% } %>
+
+    <div class="card mb-3 border-light">
+      <div class="card-header text-dark bg-light">
+        <h6>Create Coupon :</h6>
+      </div>
+      <div class="card-body col-md-10 ">
+        <form action="" method="post" class="  d-flex flex-wrap justify-content-between align-items-start" onsubmit="return validateForm()">
+
+          <div class="form-group col-md-5 mb-3 ">
+            <label for="couponCode">Coupon Code:</label>
+            <input type="text" class="form-control" id="couponCode" name="couponCode" oninput="this.value = this.value.toUpperCase()">
+            <p id="validationMessages1" class="text-danger"></p>
+
+          </div>
+
+          <div class="form-group col-md-5 mb-3 ">
+            <label for="couponExpiry">Coupon Expiry:</label>
+            <input type="date" class="form-control" id="couponExpiry" name="couponExpiry">
+            <p id="validationMessages2" class="text-danger"></p>
+
+          </div>
+
+          <div class="form-group col-md-5 mb-3">
+            <label for="discountPercentage">Discount Percentage:</label>
+            <input type="number" class="form-control" id="discountPercentage" name="discountPercentage" max="100" min="1">
+            <p id="validationMessages3" class="text-danger"></p>
+
+          </div>
+
+
+
+          <div class="form-group col-md-5 mb-3">
+            <label for="minimumAmount">Minimum Amount To Use Coupon:</label>
+            <input type="number" class="form-control" id="minimumAmount" name="minimumAmount" min="1">
+            <p id="validationMessages4" class="text-danger"></p>
+
+          </div>
+          <div class="form-group col-md-5 mb-3">
+            <label for="maximumAmount">Maximum Discount Amount:</label>
+            <input type="number" class="form-control" id="maximumAmount" name="maximumAmount" min="1">
+            <p id="validationMessages5" class="text-danger"></p>
+
+          </div>
+
+          <div class="form-group col-md-5 mb-3">
+            <label for="maxUsesPerUser">Max Uses Per User:</label>
+            <input type="number" class="form-control" id="maxUsesPerUser" name="maxUsesPerUser" min="1">
+            <p id="validationMessages6" class="text-danger"></p>
+
+          </div>
+
+
+          <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-success">Create Coupon</button>
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+
+
+
+
+
+  </section> <!-- content-main end// -->
+
+
+
+
+
+  <script>
+    function validateForm() {
+      // Clear previous validation messages
+      $('#validationMessages1').text('');
+      $('#validationMessages2').text('');
+      $('#validationMessages3').text('');
+      $('#validationMessages4').text('');
+      $('#validationMessages5').text('');
+      $('#validationMessages6').text('');
+
+      var isValid = true;
+
+      var isValid = true;
+      var today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+
+      // Validation for Coupon Code
+      if (!$('#couponCode').val().trim()) {
+        $('#validationMessages1').text('Coupon Code cannot be empty.');
+        isValid = false;
+      }
+
+      // Validation for Coupon Expiry Date
+      var couponExpiry = $('#couponExpiry').val();
+      if (!couponExpiry) {
+        $('#validationMessages2').text('Coupon Expiry date cannot be empty.');
+        isValid = false;
+      } else {
+        var expiryDate = new Date(couponExpiry);
+        if (expiryDate < today) {
+          $('#validationMessages2').text('Coupon Expiry date cannot be in the past.');
+          isValid = false;
+        }
+      }
+
+      // Validation for Coupon Code
+      if (!$('#couponCode').val().trim()) {
+        $('#validationMessages1').text('Coupon Code cannot be empty.');
+        isValid = false;
+      }
+
+      // Validation for Discount Percentage
+      if (!$('#discountPercentage').val().trim()) {
+        $('#validationMessages3').text('Discount Percentage cannot be empty.');
+        isValid = false;
+      } else if (parseInt($('#discountPercentage').val()) > 100) {
+        $('#validationMessages3').text('Discount Percentage cannot be greater than 100.');
+        isValid = false;
+      }
+
+      // Validation for Minimum Amount
+      if (!$('#minimumAmount').val().trim()) {
+        $('#validationMessages4').text('Minimum amount cannot be empty.');
+        isValid = false;
+      } else if (parseInt($('#minimumAmount').val()) < 1) {
+        $('#validationMessages4').text('Minimum amount should be greater than 1.');
+        isValid = false;
+      }
+
+      // Validation for Maximum Amount
+      if (!$('#maximumAmount').val().trim()) {
+        $('#validationMessages5').text('Maximum amount cannot be empty.');
+        isValid = false;
+      } else if (parseInt($('#maximumAmount').val()) < 1) {
+        $('#validationMessages5').text('Maximum amount should be greater than 1.');
+        isValid = false;
+      }
+
+      // Validation for Max Uses Per User
+      if (!$('#maxUsesPerUser').val().trim()) {
+        $('#validationMessages6').text('Maximum uses per user cannot be empty.');
+        isValid = false;
+      } else if (parseInt($('#maxUsesPerUser').val()) < 1) {
+        $('#validationMessages6').text('Maximum uses per user should be at least 1.');
+        isValid = false;
+      }
+
+      // If any field is invalid, prevent form submission
+      return isValid;
+    }
+  </script>
+
+
+  <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>

@@ -1,0 +1,147 @@
+<%- include("../layouts/admin_layouts/admin_header.ejs") -%>
+
+    <div class="screen-overlay"></div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function () {
+            new DataTable('#coupons')
+        })
+    </script>
+
+
+
+    <%- include("../layouts/admin_layouts/admin_asidenav.ejs") -%>
+
+        <main class="main-wrap">
+
+            <%- include("../layouts/admin_layouts/admin_topnav.ejs") -%>
+
+                <section class="content-main  ">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title">Coupons
+                                List</h2>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="admin_add_coupon_form" class="btn btn-primary">Create
+                                Coupon</a>
+                        </div>
+
+                    </div>
+
+                    <div id="errorMessage" style="color: red; margin: 20px; font-style: italic; font-size: 25px;">
+                        <% if(message && typeof message !=='undefined' ){ %>
+                            <%= message %>
+                                <% } %>
+                    </div>
+
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <div class="row gx-3">
+
+                                <% if (couponData && couponData.length> 0) { %>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover" id="coupons"
+                                            style="table-layout: fixed;" id="coupons">
+                                            <thead class="thead-dark" style="background-color:#088178; color: white;">
+
+                                                <tr>
+                                                    <th>Coupon Code</th>
+                                                    <th>Discount Percent</th>
+                                                    <th>Coupon Expiry</th>
+                                                    <th>Min Redeemable Amt</th>
+                                                    <th>Maximum Discount</th>
+                                                    <th>Max Uses Per User</th>
+                                                    <th>Is Active</th>
+                                                    <th>Action</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (let i=0; i < couponData.length; i++) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= couponData[i].couponCode %>
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].discountPercentage %>%
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].couponExpiry.toLocaleDateString() %>
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].minimumAmount %>
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].maximumAmount %>
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].maxUsesPerUser %>
+                                                        </td>
+                                                        <td>
+                                                            <%= couponData[i].isActive ? 'Yes' : 'No' %>
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="admin_edit_coupon?couponId=<%=couponData[i]._id%>">
+                                                                <i class="material-icons md-edit mr-20"> </i>
+                                                            </a>
+                                                            <a href="#"
+                                                                onclick="confirmDeleteCoupon('admin_delete_coupon?couponId=<%=couponData[i]._id%>')">
+                                                                <i class="material-icons md-delete"> </i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+
+                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <p>No coupons available.</p>
+                                        <% } %>
+                            </div>
+                        </header>
+                    </div>
+
+
+                </section>
+
+
+                <script>
+
+                    function clearErrorMessage() {
+                        var errorMessageDiv = document.getElementById('errorMessage');
+                        if (errorMessageDiv) {
+                            setTimeout(function () {
+                                errorMessageDiv.innerHTML = '';
+                            }, 6000);
+                        }
+                    }
+                    window.onload = clearErrorMessage;
+
+                    function confirmDeleteCoupon(deleteCoupon) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You are about to Delete this Coupon.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = deleteCoupon;
+                            }
+                        });
+                    }
+
+                </script>
+
+                <%- include("../layouts/admin_layouts/admin_footer.ejs") -%>
