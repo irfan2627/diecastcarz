@@ -137,12 +137,6 @@ admin_route.get('/admin_unblock_category_offer', adminAuth.isLogin, offerControl
 // TRANSACTIONS
 admin_route.get('/admin_transactions', adminAuth.isLogin, adminController.admin_transactions)
 
-
-
-
-
-
-
 // Admin Logout
 admin_route.get('/logout', adminAuth.isLogin, adminController.adminLogout);
 
