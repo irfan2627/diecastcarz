@@ -12,10 +12,8 @@ const path = require('path')
 app.use(nocache());
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
-
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
-
 
 
 // MongoDB connection
@@ -26,7 +24,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
   console.error("MongoDB Connection Error:", error);
   process.exit(1); // Exit the application if MongoDB connection fails
 });
-
+ 
 
 //session middleware 
 app.use(session({
