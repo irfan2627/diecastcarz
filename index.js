@@ -18,8 +18,16 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users");
+// mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users");
 
+// MongoDB connection
+mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
+  console.log("Connected to MongoDB");
+})
+.catch(error => {
+  console.error("MongoDB connection error:", error);
+  process.exit(1); // Exit the application if MongoDB connection fails
+});
 
 
 //session middleware 
