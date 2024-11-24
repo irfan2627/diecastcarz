@@ -17,8 +17,6 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }));
 
 
-// MongoDB connection
-// mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users");
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
