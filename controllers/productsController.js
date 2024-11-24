@@ -82,7 +82,7 @@ const admin_add_product = async (req, res) => {
             const outputPath = `${processedImagesFolder}${uniqueIdentifier}_cropped.jpg`;
 
             await sharp(imagePath)
-                .resize(750, 500)
+                .resize(1500, 1000)
                 .toFile(outputPath);
 
             return outputPath;
@@ -176,7 +176,11 @@ const admin_edit_product = async (req, res) => {
             const outputPath = `${processedImagesFolder}${uniqueIdentifier}_cropped.jpg`;
 
             await sharp(imagePath)
-                .resize(750, 500)
+                .resize({
+                    width: 1500,
+                    height: 1000,
+                     
+                })
                 .toFile(outputPath);
 
             return outputPath;

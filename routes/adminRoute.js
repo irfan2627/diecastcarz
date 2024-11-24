@@ -69,13 +69,13 @@ admin_route.get('/admin_delete_user', adminAuth.isLogin, adminController.admin_d
 
 // PRODUCTS
 admin_route.get('/admin_add_product_form', adminAuth.isLogin, productsController.admin_add_product_form)
-admin_route.post('/admin_add_product_form', productImages.array('productImages',8), adminAuth.isLogin, productsController.admin_add_product)
+admin_route.post('/admin_add_product_form', productImages.array('productImages',20), adminAuth.isLogin, productsController.admin_add_product)
 
 admin_route.get('/admin_products_list', adminAuth.isLogin, productsController.admin_products_list)
 admin_route.get('/admin_products_grid', adminAuth.isLogin, productsController.admin_products_grid)
 
 admin_route.get('/admin_edit_product_form', adminAuth.isLogin, productsController.admin_edit_product_form)
-admin_route.post('/admin_edit_product_form', productImages.array('productImages',8), adminAuth.isLogin, productsController.admin_edit_product)
+admin_route.post('/admin_edit_product_form', productImages.array('productImages',20), adminAuth.isLogin, productsController.admin_edit_product)
 
 admin_route.get('/admin_delete_product', adminAuth.isLogin, productsController.admin_delete_product)
 
@@ -136,6 +136,10 @@ admin_route.get('/admin_unblock_category_offer', adminAuth.isLogin, offerControl
 
 // TRANSACTIONS
 admin_route.get('/admin_transactions', adminAuth.isLogin, adminController.admin_transactions)
+
+
+
+
 
 // Admin Logout
 admin_route.get('/logout', adminAuth.isLogin, adminController.adminLogout);

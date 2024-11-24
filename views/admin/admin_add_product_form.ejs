@@ -244,6 +244,8 @@
 
     });
 
+
+    
     function validateForm() {
 
 
@@ -281,6 +283,7 @@
       }
 
       let scalePattern = /^1:\d+$/;
+
       if (scale.trim() === '') {
         document.getElementById('scaleM').innerText = 'Scale cannot be empty';
         return false;
