@@ -421,6 +421,10 @@ const userHome = async (req, res) => {
             { $limit: 10 } // Limit to top 10 categories
         ]);
 
+        if(topSellingCategories && topSellingProducts){
+            console.log('got topSelling Categories and Products');
+            
+        }
 
 
         if (userData.is_admin === 0) {
@@ -439,6 +443,7 @@ const userHome = async (req, res) => {
         console.log('userHome err :' + error.message);
     }
 }
+
 
 
 
