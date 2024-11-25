@@ -422,7 +422,7 @@ const userHome = async (req, res) => {
         ]);
 
         if(topSellingCategories && topSellingProducts){
-            console.log('got topSelling Categories and Products');
+            console.log('got top Selling Categories and Products');
             
         }
 
