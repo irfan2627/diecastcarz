@@ -390,7 +390,36 @@ const userHome = async (req, res) => {
             { $limit: 8 } // Get the top product
         ]);
         
-
+        const topSellingCategories = await Order.aggregate([
+            { $unwind: "$products" }, // Deconstruct the products array
+            {
+                $lookup: {
+                    from: "products", // Reference the Product collection
+                    localField: "products.productId", // Match productId from Orders' products array
+                    foreignField: "_id", // Match with _id in Product collection
+                    as: "productDetails" // Alias for the result set
+                }
+            },
+            { $unwind: "$productDetails" }, // Unwind the productDetails to work with individual product documents
+            {
+                $lookup: {
+                    from: "categories", // Reference the Category collection
+                    localField: "productDetails.category", // Match category (string) from Product collection
+                    foreignField: "categoryName", // Match with categoryName in Category collection
+                    as: "categoryDetails" // Alias for the result set
+                }
+            },
+            { $unwind: "$categoryDetails" }, // Unwind the categoryDetails array to work with the category
+            {
+                $group: {
+                    _id: "$categoryDetails.categoryName", // Group by category name
+                    totalQuantity: { $sum: "$products.quantity" }, // Sum the quantities sold for each category
+                    categoryImage: { $first: "$categoryDetails.categoryImages" } // Include categoryImage from Category
+                }
+            },
+            { $sort: { totalQuantity: -1 } }, // Sort categories by total quantity sold in descending order
+            { $limit: 10 } // Limit to top 10 categories
+        ]);
 
 
 
@@ -401,6 +430,7 @@ const userHome = async (req, res) => {
                 categories: categoriesData,
                 cart,
                 topSellingProducts,
+                topSellingCategories
                 
             })
         }
