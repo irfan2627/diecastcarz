@@ -21,7 +21,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
   console.log("Connected to MongoDB");
 })
 .catch(error => {
-  console.error("MongoDB not Connected! \n MongoDB Connection Error:", error);
+  console.error("MongoDB not Connected! \n  MongoDB Connection Error:", error);
   process.exit(1); // Exit the application if MongoDB connection fails
 });
  
