@@ -64,7 +64,7 @@ const verifyLogin = async (req, res) => {
             }
         }
         else {
-            console.log('AdminLoginPage : Entered Email or password is incorrect');
+            console.log('AdminLoginPage : Entered Email is Incorrect');
 
             return res.render('admin_login', { message: "Your entered email or password is incorrect" })
         }
