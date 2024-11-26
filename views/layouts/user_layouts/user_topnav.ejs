@@ -197,7 +197,7 @@
             </a>
             <div class="categori-dropdown-wrap categori-dropdown-active-large" style="max-height: 400px; overflow-y: auto;">
               <ul>
-                <% if (categories && typeof categories !=='undefined' ) { %>
+                <% if (typeof categories !=='undefined' && categories   ) { %>
 
                 <% for (let i=0; i < 7; i++) { %>
                 <li>
@@ -206,12 +206,13 @@
                   </a>
                 </li>
                 <% } %>
+
                 <% } else { %>
                 <li>No categories available</li>
                 <% } %>
                 <li>
                   <ul class="more_slide_open" style="display: none; ">
-                    <% if (categories && typeof categories !=='undefined' ) { %>
+                    <% if (typeof categories !=='undefined' && categories   ) { %>
 
                     <% for (let i=7; i < categories.length; i++) { %>
                     <li>

@@ -25,6 +25,7 @@ const securePassword = async (password) => {
 //to load the admin login page
 const loadLogin = async (req, res) => {
     try {
+        console.log('AdminLoginPage Loaded');
 
         res.render('admin_login')
 
@@ -41,13 +42,11 @@ const verifyLogin = async (req, res) => {
         const email = req.body.email
         const password = req.body.password
 
-
-
-
         const userData = await User.findOne({ email: email })
 
         if (userData) {
             if (userData.is_admin === 0) {
+                console.log('AdminLoginPage : Users should login using the admin page');
                 return res.render('admin_login', { message: "Users should login using the admin page" });
             }
 
@@ -55,13 +54,18 @@ const verifyLogin = async (req, res) => {
 
             if (passwordMatch) {
                 req.session.user_id = userData._id
+                console.log('AdminLoginPage : Admin Login Successful');
                 return res.redirect('/admin/admin_home');
             }
             else {
+                console.log('AdminLoginPage : Entered Email or password is incorrect');
+
                 return res.render('admin_login', { message: "Entered Email or password is incorrect" })
             }
         }
         else {
+            console.log('AdminLoginPage : Entered Email or password is incorrect');
+
             return res.render('admin_login', { message: "Entered Email or password is incorrect" })
         }
 
