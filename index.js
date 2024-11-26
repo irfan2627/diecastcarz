@@ -55,6 +55,6 @@ app.use('/admin', adminRoute)
 // Server listening
 const port = 8000;
 app.listen(port, () => {
-  console.log(`Server is running at : http://127.0.0.1:${port}`);
+  console.log(`Server is successfully running at : http://127.0.0.1:${port}`);
 });
 
