@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
-  console.log("Successfully Connected to MongoDB !");
+  console.log("Successfully Connected to MongoDB !!");
 })
 .catch(error => {
   console.error("MongoDB not Connected! \n  MongoDB Connection Error:", error);
