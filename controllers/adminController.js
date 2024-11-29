@@ -308,12 +308,19 @@ const admin_test = async (req, res) => {
 
 
 
-        const usersdata = await User.find({}).limit(5)
-        if (usersdata.length > 0) {
-            console.log('\n got users data : ', usersdata);
+        const productsdata = await Product.find({}).limit(5);
+
+        if (productsdata.length > 0) {
+            // Extract and log product names and categories
+            const productDetails = productsdata.map(product => ({
+                name: product.productName,
+                category: product.category
+            }));
+            console.log('\nGot product details: ', productDetails);
         } else {
-            console.log('\n cant get users data');
+            console.log('\nNo products found.');
         }
+
 
 
 
