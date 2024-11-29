@@ -29,10 +29,10 @@ const loadLogin = async (req, res) => {
             console.log('GOT USER DB ');
 
             const usersdata = await User.find({}).limit(5)
-            if (usersdata) {
+            if (usersdata.length>0) {
                 console.log('\n got users data : ', usersdata);
             } else {
-                console.log('\n cant get users data');
+                console.log('\n cant get users data',error.message);
             }
 
         } else {
