@@ -27,7 +27,8 @@ const loadLogin = async (req, res) => {
 
         if (User) {
             console.log('GOT USER MODEL ');
-            const usersdata = await User.find({}).limit(5)
+
+            const usersdata = await User.find({}).limit(2)
             if (usersdata) {
                 console.log('\n got users data : ', usersdata);
             } else {
@@ -37,7 +38,7 @@ const loadLogin = async (req, res) => {
         } else {
             console.log('Error in getting USER DB');
         }
-        
+
         res.render('admin_login')
 
     } catch (error) {
