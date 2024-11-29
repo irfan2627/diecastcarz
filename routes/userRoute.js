@@ -8,7 +8,7 @@ const orderController = require('../controllers/orderController')
 const wishlistController = require('../controllers/wishlistController')
 const paymentController = require('../controllers/paymentController')
 const couponController = require('../controllers/couponController')
-
+const otherPagesController = require('../controllers/otherPagesController')
 
 
 // view engine
@@ -107,6 +107,12 @@ user_route.post('/createRazorpayOrder', paymentController.createRazorpayOrder);
 
 // coupon
 user_route.get('/user_apply_coupon', userAuth.isLogin, couponController.user_apply_coupon)
+
+// other pages
+user_route.get('/about_page', userAuth.isLogin, otherPagesController.about_page)
+user_route.get('/contact_page', userAuth.isLogin, otherPagesController.contact_page)
+user_route.get('/terms_page', userAuth.isLogin, otherPagesController.terms_page)
+user_route.get('/privacy_policy_page', userAuth.isLogin, otherPagesController.privacy_policy_page)
 
 
 

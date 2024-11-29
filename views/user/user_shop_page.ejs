@@ -156,9 +156,7 @@
                     </a>
 
                   </div>
-                  <div class="product-badges product-badges-position product-badges-mrg">
-                    <span class="hot">Hot</span>
-                  </div>
+                  
                 </div>
                 <div class="product-content-wrap">
                   <h2> <a href="/user_product_page?id=<%=products[i]._id %>" style="background-color: rgb(255, 255, 255);">
@@ -181,7 +179,9 @@
 
                   </div>
                   <p class="mt-15">
-                    <%= products[i].description %>
+                    
+                      <%= products[i].description.split('.').slice(0, 1).join('.') + '.' %>
+                    
                   </p>
                   <div class="product-action-1 show">
                     <% if (user && typeof user !=='undefined' ) { %>

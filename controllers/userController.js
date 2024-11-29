@@ -389,7 +389,7 @@ const userHome = async (req, res) => {
             { $sort: { totalQuantity: -1 } }, // Sort by totalQuantity descending
             { $limit: 8 } // Get the top product
         ]);
-        
+
         const topSellingCategories = await Order.aggregate([
             { $unwind: "$products" }, // Deconstruct the products array
             {
@@ -414,16 +414,22 @@ const userHome = async (req, res) => {
                 $group: {
                     _id: "$categoryDetails.categoryName", // Group by category name
                     totalQuantity: { $sum: "$products.quantity" }, // Sum the quantities sold for each category
-                    categoryImage: { $first: "$categoryDetails.categoryImages" } // Include categoryImage from Category
+                    categoryImage: { $first: "$categoryDetails.categoryImages" }, // Include categoryImage from Category
+                    isCategoryOfferActive: { $first: "$categoryDetails.isCategoryOfferActive" },
+                    categoryOfferPercentage: { $first: "$categoryDetails.categoryOfferPercentage" }
                 }
             },
             { $sort: { totalQuantity: -1 } }, // Sort categories by total quantity sold in descending order
             { $limit: 10 } // Limit to top 10 categories
         ]);
 
-        if(topSellingCategories && topSellingProducts){
-            console.log('got top Selling Categories and Products');
-            
+        const dealProducts = await Product.find({ isActive: true, isProductOfferActive: true })
+
+
+
+        if (topSellingCategories && topSellingProducts && dealProducts) {
+            console.log('gotTopAndDealProducts');
+
         }
 
 
@@ -434,8 +440,9 @@ const userHome = async (req, res) => {
                 categories: categoriesData,
                 cart,
                 topSellingProducts,
-                topSellingCategories
-                
+                topSellingCategories,
+                dealProducts
+
             })
         }
 
@@ -527,6 +534,25 @@ const user_product_page = async (req, res) => {
         const productData = await Product.findById({ _id: id })
         const categories = await Category.find({ isActive: true });
 
+        const categoryProducts = await Product.find({ isActive: true, category: productData.category }).sort({ _id: -1 })
+        const otherProducts = await Product.find({ isActive: true }).sort({ _id: -1 })
+        let relatedProducts = [...categoryProducts]; // Start with categoryProducts
+
+        // Check if there are still spaces left in the relatedProducts array
+        if (relatedProducts.length < 8) {
+            // Add other products to fill the remaining space, ensuring no more than 8 items
+            const remainingSpace = 8 - relatedProducts.length;
+            relatedProducts = [...relatedProducts, ...otherProducts.slice(0, remainingSpace)];
+        }
+
+       
+        if (relatedProducts) {
+            console.log("\n relatedProducts sum is:", relatedProducts.length);
+            relatedProducts.forEach(product => {
+                console.log("\n relatedProducts productName is:", product.productName);
+            });
+        }
+
 
         if (productData) {
             let cart = await Cart.findOne({ userId: userData }).populate(
@@ -536,7 +562,7 @@ const user_product_page = async (req, res) => {
                 cart = new Cart({ userId: userData, products: [] });
             }
 
-            res.render('user_product_page', { products: productData, user: userData, cart, categories })
+            res.render('user_product_page', { products: productData,relatedProducts, user: userData, cart, categories })
         }
         else {
             res.redirect('/user_home')
