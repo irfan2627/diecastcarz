@@ -8,7 +8,7 @@ const Coupon = require('../models/couponsModel');
 
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring")
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const securePassword = async (password) => {
     try {

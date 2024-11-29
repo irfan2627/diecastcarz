@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require("sharp");
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { render } = require('../routes/userRoute');
 
 const securePassword = async (password) => {
@@ -25,7 +25,10 @@ const loadLogin = async (req, res) => {
     try {
         console.log('AdminLoginPage Loaded');
 
-        
+        if (User) {
+            console.log('GOT USER MODEL ');
+
+            
 
         } else {
             console.log('Error in getting USER DB');
