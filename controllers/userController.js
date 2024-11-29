@@ -280,6 +280,8 @@ const isOtpExpired = (timestamp) => {
 
 
 
+
+
 // login load
 const loginLoad = async (req, res) => {
     try {
@@ -293,6 +295,12 @@ const loginLoad = async (req, res) => {
         console.log("loginLoad err :" + error.message);
     }
 }
+
+
+
+
+
+
 
 //verifyLogin
 const verifyLogin = async (req, res) => {

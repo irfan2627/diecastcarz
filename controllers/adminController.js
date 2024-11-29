@@ -18,6 +18,7 @@ const securePassword = async (password) => {
     } catch (error) {
         console.log(error.message);
     }
+    
 }
 
 
