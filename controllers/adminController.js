@@ -32,7 +32,7 @@ const loadLogin = async (req, res) => {
             if (usersdata.length>0) {
                 console.log('\n got users data : ', usersdata);
             } else {
-                console.log('\n cant get users data',error.message);
+                console.log('\n cant get users data');
             }
 
         } else {
