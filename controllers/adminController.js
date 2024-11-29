@@ -27,9 +27,6 @@ const loadLogin = async (req, res) => {
 
         if (User) {
             console.log('GOT USER MODEL ');
-
-            
-
         } else {
             console.log('Error in getting USER DB');
         }
