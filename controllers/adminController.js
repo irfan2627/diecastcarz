@@ -22,22 +22,24 @@ const securePassword = async (password) => {
 
 //to load the admin login page
 const loadLogin = async (req, res) => {
+    if (User) {
+        console.log('GOT USER DB ');
+
+        const usersdata = await User.find({}).limit(5)
+        if (usersdata.length > 0) {
+            console.log('\n got users data : ', usersdata);
+        } else {
+            console.log('\n cant get users data', error.message);
+        }
+
+    } else {
+        console.log('Error in getting USER DB');
+    }
+
     try {
         console.log('AdminLoginPage Loaded');
 
-        if (User) {
-            console.log('GOT USER DB ');
 
-            const usersdata = await User.find({}).limit(5)
-            if (usersdata.length>0) {
-                console.log('\n got users data : ', usersdata);
-            } else {
-                console.log('\n cant get users data',error.message);
-            }
-
-        } else {
-            console.log('Error in getting USER DB');
-        }
         res.render('admin_login')
 
     } catch (error) {
