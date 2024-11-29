@@ -29,7 +29,7 @@ const loadLogin = async (req, res) => {
             console.log('GOT USER DB ');
 
             const usersdata = await User.find({}).limit(5)
-            if (usersdata.length>0) {
+            if (usersdata.length > 0) {
                 console.log('\n got users data : ', usersdata);
             } else {
                 console.log('\n cant get users data');
@@ -38,6 +38,7 @@ const loadLogin = async (req, res) => {
         } else {
             console.log('Error in getting USER DB');
         }
+
         res.render('admin_login')
 
     } catch (error) {
@@ -304,6 +305,18 @@ const adminLogout = async (req, res) => {
 // ADMIN TEST
 const admin_test = async (req, res) => {
     try {
+
+
+
+        const usersdata = await User.find({}).limit(5)
+        if (usersdata.length > 0) {
+            console.log('\n got users data : ', usersdata);
+        } else {
+            console.log('\n cant get users data');
+        }
+
+
+
         res.render('admin_test')
     } catch (error) {
         console.log("Error in admin_test : ", error.message);
