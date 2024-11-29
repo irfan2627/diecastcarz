@@ -7,7 +7,6 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require("sharp");
 
-
 const bcrypt = require('bcrypt');
 const { render } = require('../routes/userRoute');
 
@@ -18,7 +17,6 @@ const securePassword = async (password) => {
     } catch (error) {
         console.log(error.message);
     }
-    
 }
 
 
@@ -27,19 +25,18 @@ const loadLogin = async (req, res) => {
     try {
         console.log('AdminLoginPage Loaded');
 
-if(User){
-    console.log('GOT USER MODEL ');
-    const usersdata = await User.find({}).limit(5)
-    if (usersdata){
-        console.log('\n got users data : ', usersdata);    
-    }else{
-        console.log('\n cant get users data');    
-    }
+        if (User) {
+            console.log('GOT USER MODEL ');
+            const usersdata = await User.find({}).limit(5)
+            if (usersdata) {
+                console.log('\n got users data : ', usersdata);
+            } else {
+                console.log('\n cant get users data');
+            }
 
-
-
-}else{console.log('Error in getting USER DB');
-}
+        } else {
+            console.log('Error in getting USER DB');
+        }
         res.render('admin_login')
 
     } catch (error) {
@@ -316,7 +313,7 @@ const admin_test = async (req, res) => {
 module.exports = {
     loadLogin,
     verifyLogin,
-    
+
 
     admin_users_list,
     admin_add_users_form,
