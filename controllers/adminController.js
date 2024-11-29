@@ -308,19 +308,12 @@ const admin_test = async (req, res) => {
 
 
 
-        const productsdata = await Product.find({}).limit(5);
+        
 
-        if (productsdata.length > 0) {
-            // Extract and log product names and categories
-            const productDetails = productsdata.map(product => ({
-                name: product.productName,
-                category: product.category
-            }));
-            console.log('\nGot product details: ', productDetails);
-        } else {
-            console.log('\nNo products found.');
-        }
-
+       
+            
+            console.log('\nGot product details: ', await Product.find({}).limit(1))
+        
 
 
 
