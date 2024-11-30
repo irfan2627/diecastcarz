@@ -171,7 +171,7 @@
             </a>
             <div class="categori-dropdown-wrap categori-dropdown-active-large " style="max-height: 400px; overflow-y: auto;  border: 1px solid #414448; border-radius: 5px; ">
               <ul>
-                <% if (typeof categories !=='undefined' && categories   ) { %>
+                <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
                 <% for (let i=0; i < 7; i++) { %>
                 <li class="d-flex align-items-center">
@@ -326,7 +326,7 @@
           <div class="categori-dropdown-wrap categori-dropdown-active-small">
             
             <ul>
-              <% if (typeof categories !=='undefined' && categories   ) { %>
+              <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
               <% for (let i=0; i < 7; i++) { %>
               <li class="d-flex align-items-center">
