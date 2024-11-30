@@ -1,11 +1,13 @@
 <%- include("../layouts/user_layouts/user_header.ejs") -%>
+
+
+<%if (typeof user !=='undefined' && user ) { %>
 <%- include("../layouts/user_layouts/user_topnav.ejs") -%>
-
-
+<% }else{ %>
+<%- include("../layouts/user_layouts/user_login_topnav.ejs") -%>
+<% } %>
 
 <main class="main single-page">
-
-
   <section class="section-padding">
     <div class="container pt-25">
       <div class="row">

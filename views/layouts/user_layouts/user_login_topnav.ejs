@@ -41,7 +41,7 @@
                   </li>
                 </ul>
               </li>
-              <li><i class="fi-rs-user"></i><a href="/login" class="logout_button">Register/Sign Up</a></li>
+              <li><i class="fi-rs-user"></i><a href="/login">Register/Sign Up</a></li>
             </ul>
           </div>
         </div>
@@ -174,7 +174,7 @@
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/login">Login</a></li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/register">Register</a></li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="about_page">About Us</a></li>
-            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="contact_page">Countact Us</a></li>
+            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="contact_page">Contact Us</a></li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="privacy_policy_page">Privacy Policy</a></li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="terms_page">Terms of Service</a></li>
 
@@ -200,6 +200,9 @@
         <div class="single-mobile-header-info">
           <a href="#"> 1800-425-1550 </a>
         </div>
+        <div class="single-mobile-header-info">
+            <a href="/login"> Register/Sign Up</a>
+          </div>
       </div>
       <div class="mobile-social-icon">
         <h5 class="mb-15 text-grey-4">Follow Us</h5>
@@ -215,29 +218,3 @@
 
 
 
-
-
-<script>
-  const logoutLinks = document.querySelectorAll('.logout_button');
-
-  logoutLinks.forEach(function(link) {
-    link.addEventListener('click', function(event) {
-      event.preventDefault();
-
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You will be logged out!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, log me out!',
-        cancelButtonText: 'No, keep me logged in!',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // If the user confirms, proceed with the logout
-          window.location.href = this.href;
-        }
-      });
-    });
-  });
-</script>

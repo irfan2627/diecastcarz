@@ -1,6 +1,9 @@
 <%- include("../layouts/user_layouts/user_header.ejs") -%>
-<%- include("../layouts/user_layouts/user_topnav.ejs") -%>
-
+<%if (typeof user !=='undefined' && user ) { %>
+  <%- include("../layouts/user_layouts/user_topnav.ejs") -%>
+  <% }else{ %>
+  <%- include("../layouts/user_layouts/user_login_topnav.ejs") -%>
+  <% } %>
 
 
 <main class="main">
