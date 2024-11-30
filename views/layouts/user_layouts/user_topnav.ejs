@@ -190,7 +190,7 @@
                 <% } %>
                 <li>
                   <ul class="more_slide_open" style="display: none; ">
-                    <% if (typeof categories !=='undefined' && categories   ) { %>
+                    <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
                     <% for (let i=7; i < categories.length; i++) { %>
                       <li class="d-flex align-items-center">
@@ -345,7 +345,7 @@
               <% } %>
               <li>
                 <ul class="more_slide_open" style="display: none; ">
-                  <% if (typeof categories !=='undefined' && categories   ) { %>
+                  <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
                   <% for (let i=7; i < categories.length; i++) { %>
                     <li class="d-flex align-items-center">
