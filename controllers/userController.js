@@ -28,7 +28,7 @@ const registerLoad = async (req, res) => {
     try {
         const categories = await Category.find({ isActive: true });
 
-        res.render('register', { categories })
+        res.render('register', { categories, message:'' })
     } catch (error) {
         console.log("registerLoad err :" + error.message);
 
@@ -116,7 +116,7 @@ const insertUser = async (req, res) => {
 
         if (usernames && user.username === usernames.username) {
             const userData = req.session.userData
-            return res.render('register', { message: "Username already exists in the system, Try logging in or create new account with a different username", userData, categories });
+            return res.render('register', { message: "Username already exists in the system, Try logging in or create new account with a different username.", userData, categories });
         }
         else if (mailExisting && user.email === mailExisting.email) {
             const userData = req.session.userData

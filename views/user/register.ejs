@@ -1,268 +1,256 @@
 <%- include("../layouts/user_layouts/user_header.ejs") -%>
 
-    <%- include("../layouts/user_layouts/user_login_topnav.ejs") -%>
-
-        <main class="main">
-
-            <section class="pt-100 pb-150">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-10 m-auto">
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
-                                        <div class="padding_eight_all bg-white">
-
-
-                                            <% if (typeof message !=='undefined' ) { %>
-                                                <h5 class="mb-30" style="color: green;">
-                                                    <%= message %>
-                                                </h5>
-                                                <% } %>
-
-                                                    <div class="heading_s1">
-                                                        <h3 class="mb-30">Create an Account</h3>
-                                                    </div>
-                                                    <p class="mb-50 font-sm">
-                                                        Your personal data will be used to support your experience
-                                                        throughout this
-                                                        website, to manage access to your account, and for other
-                                                        purposes described
-                                                        in our privacy policy
-                                                    </p>
+<%- include("../layouts/user_layouts/user_login_topnav.ejs") -%>
 
 
 
-                                                    <form method="post" action="/register" enctype="multipart/form-data"
-                                                        onsubmit="return validateForm()">
-                                                        <div class="form-group">
-                                                            <input type="text" name="username" placeholder="Username"
-                                                                id="username" />
-                                                            <p id="usernameError" style="color: red;"> </p>
-                                                        </div>
+<style>
+  /* Background image for the main content */
+  main.main {
+    background: url('/public/assets/imgs/banner/bg22.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-                                                        <div class="form-group">
-                                                            <input type="text" name="email" placeholder="Email"
-                                                                id="email" />
-                                                            <p id="emailError" style="color: red;"> </p>
-                                                        </div>
+  /* Styling for the registration card */
+  .register-card {
+    background-color: rgba(255, 255, 255, 0.943);
+    /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    /* Full width on small devices */
+    max-width: 500px;
+    /* Limit max width */
+  }
 
-                                                        <div class="form-group">
-                                                            <input type="text" name="mobile" placeholder="Mobile Number"
-                                                                id="mobile" />
-                                                            <p id="mobileError" style="color: red;"> </p>
-                                                        </div>
+  /* For better spacing on smaller screens */
+  .form-control {
+    margin-bottom: 15px;
+  }
+</style>
 
+<main class="main">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-6 col-lg-4 ">
+        <div class="register-card">
+          <h3 class="text-center  mb-1 ">Create Your Account</h3>
 
+          <div class="text-muted text-center mb-2">Already have an account? <a href="/" class="text-primary">Sign in now</a></div>
 
-                                                        <div class="form-group">
-                                                            <input type="password" name="password"
-                                                                placeholder="Password" id="password" />
-                                                            <p id="passwordError" style="color: red;"> </p>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="password" name="repeatPassword"
-                                                                placeholder="Repeat Password" id="repeatPassword" />
-                                                            <p id="repeatPasswordError" style="color: red;"></p>
-                                                        </div>
-
-
-
-
-
-                                                        
-
-
-                                                        <div class="login_footer form-group">
-                                                            <div class="chek-form">
-                                                                <div class="custome-checkbox">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        name="checkbox" id="checkbox" value="">
-                                                                    <label class="form-check-label"
-                                                                        for="checkbox"><span>I agree to terms
-                                                                            &amp; Policy.</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <a href="page-privacy-policy.html"><i
-                                                                    class="fi-rs-book-alt mr-5 text-muted"></i>Lean
-                                                                more</a>
-                                                        </div>
-
-                                                        <p id="termsError" style="color: red;"></p>
-
-                                                        <div class="form-group">
-                                                            <button type="submit"
-                                                                class="btn btn-fill-out btn-block hover-up"
-                                                                name="login">
-                                                                Register
-                                                            </button>
-                                                        </div>
-
-
-                                                    </form>
+          <% if (typeof message !=='undefined' ) { %>
+          <h5 class="mb-30 text-danger text-center">
+            <%= message %>
+          </h5>
+          <% } %>
 
 
 
+          <form method="post" action="/register" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="form-group">
+              <label for="username">Create your Username :</label>
+              <input type="text" name="username" placeholder="Enter your Username" id="username">
+              <p id="usernameError" style="color: red;"> </p>
+            </div>
 
+            <div class="form-group">
+              <label for="email">Enter your Email Address</label>
+              <input type="text" name="email" placeholder="Enter your Email Address" id="email">
+              <p id="emailError" style="color: red;"> </p>
+            </div>
 
-                                                    <div class="text-muted text-center">Already have an account? <a
-                                                            href="/">Sign in
-                                                            now</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="form-group">
+              <label for="mobile">Provide your Mobile Number</label>
+              <input type="text" name="mobile" placeholder="Provide your Mobile Number" id="mobile">
+              <p id="mobileError" style="color: red;"> </p>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Create a Password</label>
+              <input type="password" name="password" placeholder="Create a Password" id="password">
+              <p id="passwordError" style="color: red;"> </p>
+            </div>
+
+            <div class="form-group">
+              <label for="repeatPassword">Confirm your Password</label>
+              <input type="password" name="repeatPassword" placeholder="Confirm your Password" id="repeatPassword">
+              <p id="repeatPasswordError" style="color: red;"></p>
+            </div>
+
+            <p class="text-center text-small " style="font-size: 0.65rem;">
+              Your data will be used to enhance your experience, manage your account, and for purposes in our privacy policy.
+            </p>
+
+            <div class="login_footer form-group">
+              <div class="chek-form">
+                <div class="custome-checkbox">
+                  <input class="form-check-input" type="checkbox" name="checkbox" id="checkbox" value="">
+                  <label class="form-check-label" for="checkbox"><span>I agree to the Terms & Privacy Policy.</span></label>
                 </div>
-            </section>
-        </main>
+              </div>
+              <a href="page-privacy-policy.html"><i class="fi-rs-book-alt mr-5 text-muted"></i>Learn more</a>
+            </div>
 
+            <p id="termsError" class="text-danger mt-0 pt-0"></p>
 
-        <%- include("../layouts/user_layouts/user_footer.ejs") -%>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary w-100">Register</button>
+            </div>
 
+          </form>
 
-
-            <script>
-
-                function validateForm() {
-
-                    var username = document.getElementById('username').value;
-                    var email = document.getElementById('email').value;
-                    var mobile = document.getElementById('mobile').value;
-                    var password = document.getElementById('password').value;
-                    var repeatPassword = document.getElementById('repeatPassword').value;
-                    var checkbox = document.getElementById('checkbox');
-                    var termsError = document.getElementById('termsError');
-
-
-                    // username
-                    if (username.trim() === '') {
-                        // Display an error message for username
-                        document.getElementById('usernameError').innerText = 'Username cannot be empty';
-                        return false; // Prevent the form from submitting
-                    } else {
-                        // Clear any previous error messages for username
-                        document.getElementById('usernameError').innerText = '';
-                    }
-
-                    // email
-                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
-                    if (email.trim() === '') {
-                        document.getElementById('emailError').innerText = 'Email cannot be empty';
-                        return false;
-                    } else if (!emailRegex.test(email)) {
-                        document.getElementById('emailError').innerText = 'Invalid email format';
-                        return false;
-                    } else {
-                        document.getElementById('emailError').innerText = '';
-                    }
-
-                    // mobile
-                    var mobileRegex = /^\d+$/;
-                    if (mobile.trim() === '') {
-                        document.getElementById('mobileError').innerText = 'Mobile number cannot be empty';
-                        return false;
-                    } else if (!mobileRegex.test(mobile)) {
-                        document.getElementById('mobileError').innerText = 'Invalid mobile number format';
-                        return false;
-                    } else if (mobile.length !== 10) {
-                        document.getElementById('mobileError').innerText = 'Mobile number should be 10 digits long';
-                        return false;
-                    } else {
-                        document.getElementById('mobileError').innerText = '';
-                    }
-
-                    // password
-                    if (password.trim() === '') {
-                        document.getElementById('passwordError').innerText = 'Password cannot be blank spaces';
-                        return false;
-                    } else if (password.length < 4) {
-                        document.getElementById('passwordError').innerText = 'Password must be at least 4 characters long';
-                        return false;
-                    } else {
-                        document.getElementById('passwordError').innerText = '';
-                    }
-
-                    // repeat password
-                    if (repeatPassword.trim() === '') {
-                        document.getElementById('repeatPasswordError').innerText = 'Please confirm your password';
-                        return false;
-                    } else if (password !== repeatPassword) {
-                        document.getElementById('repeatPasswordError').innerText = 'Passwords do not match';
-                        return false;
-                    } else {
-                        document.getElementById('repeatPasswordError').innerText = '';
-                    }
-
-                    // terms and conditions
-                    if (!checkbox.checked) {
-                        termsError.innerText = 'You must agree to the terms and policy before registering.';
-                        return false;
-                    } else {
-                        termsError.innerText = ''; // Clear the error message if the checkbox is checked
-                    }
-
-
-                    return true;
-
-                }
+          <div class="text-muted text-center">Already have an account? <a href="/" class="text-primary">Sign in now</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
 
 
-                document.addEventListener('DOMContentLoaded', function () {
-                    let filesList = []; // To maintain the list of files to upload
-
-                    document.getElementById('image').addEventListener('change', function (event) {
-                        filesList = Array.from(event.target.files); // Store the selected files in the array
-
-                        // Remove existing images in the preview container
-                        var imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                        while (imagePreviewContainer.firstChild) {
-                            imagePreviewContainer.removeChild(imagePreviewContainer.firstChild);
-                        }
-
-                        // Add images to the preview and attach the close event
-                        filesList.forEach(function (file, index) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-
-                                var imageContainer = document.createElement('div');
-                                imageContainer.classList.add('uploaded-image-container');
-
-                                var img = document.createElement('img');
-                                img.src = e.target.result;
-                                img.style.maxWidth = '100px';
-                                img.style.height = 'auto';
-                                img.alt = 'Uploaded Image';
-                                img.classList.add('uploaded-image');
-
-                                var closeButton = document.createElement('div');
-                                closeButton.classList.add('close-icon');
-                                closeButton.innerHTML = '&#10006;';
-                                closeButton.style.cursor = 'pointer';
-
-                                // Remove the image from the preview and from the filesList array
-                                closeButton.addEventListener('click', function () {
-                                    filesList.splice(index, 1); // Remove the file from the array
-                                    imageContainer.remove(); // Remove the preview
-
-                                    // Update the file input with the new file list
-                                    const dataTransfer = new DataTransfer();
-                                    filesList.forEach(file => dataTransfer.items.add(file));
-                                    document.getElementById('image').files = dataTransfer.files;
-                                });
-
-                                imageContainer.appendChild(img);
-                                imageContainer.appendChild(closeButton);
-                                imagePreviewContainer.appendChild(imageContainer);
-                            };
-
-                            reader.readAsDataURL(file);
-                        });
-                    });
-                });
 
 
-            </script>
+<script>
+  function validateForm() {
+
+    var username = document.getElementById('username').value;
+    var email = document.getElementById('email').value;
+    var mobile = document.getElementById('mobile').value;
+    var password = document.getElementById('password').value;
+    var repeatPassword = document.getElementById('repeatPassword').value;
+    var checkbox = document.getElementById('checkbox');
+    var termsError = document.getElementById('termsError');
+
+
+    // username
+    if (username.trim() === '') {
+      // Display an error message for username
+      document.getElementById('usernameError').innerText = 'Username cannot be empty';
+      return false; // Prevent the form from submitting
+    } else {
+      // Clear any previous error messages for username
+      document.getElementById('usernameError').innerText = '';
+    }
+
+    // email
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+/;
+    if (email.trim() === '') {
+      document.getElementById('emailError').innerText = 'Email cannot be empty';
+      return false;
+    } else if (!emailRegex.test(email)) {
+      document.getElementById('emailError').innerText = 'Invalid email format';
+      return false;
+    } else {
+      document.getElementById('emailError').innerText = '';
+    }
+
+    // mobile
+    var mobileRegex = /^\d+$/;
+    if (mobile.trim() === '') {
+      document.getElementById('mobileError').innerText = 'Mobile number cannot be empty';
+      return false;
+    } else if (!mobileRegex.test(mobile)) {
+      document.getElementById('mobileError').innerText = 'Invalid mobile number format';
+      return false;
+    } else if (mobile.length !== 10) {
+      document.getElementById('mobileError').innerText = 'Mobile number should be 10 digits long';
+      return false;
+    } else {
+      document.getElementById('mobileError').innerText = '';
+    }
+
+    // password
+    if (password.trim() === '') {
+      document.getElementById('passwordError').innerText = 'Password cannot be blank spaces';
+      return false;
+    } else if (password.length < 4) {
+      document.getElementById('passwordError').innerText = 'Password must be at least 4 characters long';
+      return false;
+    } else {
+      document.getElementById('passwordError').innerText = '';
+    }
+
+    // repeat password
+    if (repeatPassword.trim() === '') {
+      document.getElementById('repeatPasswordError').innerText = 'Please confirm your password';
+      return false;
+    } else if (password !== repeatPassword) {
+      document.getElementById('repeatPasswordError').innerText = 'Passwords do not match';
+      return false;
+    } else {
+      document.getElementById('repeatPasswordError').innerText = '';
+    }
+
+    // terms and conditions
+    if (!checkbox.checked) {
+      termsError.innerText = 'You must agree to the terms and policy before registering.';
+      return false;
+    } else {
+      termsError.innerText = ''; // Clear the error message if the checkbox is checked
+    }
+
+    return true;
+
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    let filesList = []; // To maintain the list of files to upload
+
+    document.getElementById('image').addEventListener('change', function(event) {
+      filesList = Array.from(event.target.files); // Store the selected files in the array
+
+      // Remove existing images in the preview container
+      var imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      while (imagePreviewContainer.firstChild) {
+        imagePreviewContainer.removeChild(imagePreviewContainer.firstChild);
+      }
+
+      // Add images to the preview and attach the close event
+      filesList.forEach(function(file, index) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+
+          var imageContainer = document.createElement('div');
+          imageContainer.classList.add('uploaded-image-container');
+
+          var img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '100px';
+          img.style.height = 'auto';
+          img.alt = 'Uploaded Image';
+          img.classList.add('uploaded-image');
+
+          var closeButton = document.createElement('div');
+          closeButton.classList.add('close-icon');
+          closeButton.innerHTML = '&#10006;';
+          closeButton.style.cursor = 'pointer';
+
+          // Remove the image from the preview and from the filesList array
+          closeButton.addEventListener('click', function() {
+            filesList.splice(index, 1); // Remove the file from the array
+            imageContainer.remove(); // Remove the preview
+
+            // Update the file input with the new file list
+            const dataTransfer = new DataTransfer();
+            filesList.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('image').files = dataTransfer.files;
+          });
+
+          imageContainer.appendChild(img);
+          imageContainer.appendChild(closeButton);
+          imagePreviewContainer.appendChild(imageContainer);
+        };
+
+        reader.readAsDataURL(file);
+      });
+    });
+  });
+</script>
+
+<%- include("../layouts/user_layouts/user_footer.ejs") -%>
