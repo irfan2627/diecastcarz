@@ -59,7 +59,7 @@
             <form action="/user_shop_page" method="GET">
 
               <input type="text" name="searchQuery" placeholder="Search for items...">
-              <button type="submit" class=" pl-30 pr-30 border" >Search</button>
+              <button type="submit" class=" pl-30 pr-30 border">Search</button>
             </form>
           </div>
 
@@ -95,13 +95,13 @@
                     <% cart.products.slice(0, 2).forEach((product, index)=> { %>
                     <li>
                       <div class="shopping-cart-img">
-                        <a href="shop-product-right.html">
+                        <a href="user_product_page?id=<%=  product.productId._id %>">
                           <img alt="Evara" src="/<%= product.productId.productImages[0] || 'placeholder.jpg' %>">
                         </a>
                       </div>
                       <div class="shopping-cart-title">
                         <h4>
-                          <a href="shop-product-right.html">
+                          <a href="user_product_page?id=<%= product.productId._id %>">
                             <%= product.productId.productName || 'Product Name'%>
                           </a>
                         </h4>
@@ -156,11 +156,12 @@
       </div>
     </div>
   </div>
+
   <div class="header-bottom header-bottom-bg-color sticky-bar">
     <div class="container">
       <div class="header-wrap header-space-between position-relative">
         <div class="logo logo-width-1 d-block d-lg-none">
-          <a href="/user_home"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
+          <a href="/user_home"><img src="/public/assets/Logo-diecastcarz.png" alt="logo"></a>
         </div>
         <div class="header-nav d-none d-lg-flex">
 
@@ -193,8 +194,8 @@
                     <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
                     <% for (let i=7; i < categories.length; i++) { %>
-                      <li class="d-flex align-items-center">
-                        <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
+                    <li class="d-flex align-items-center">
+                      <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
                         <img src="/<%= categories[i].categoryImages %>" alt="" class="ms-2" style="max-width: 30px; height: auto;">
                       </a>
                       <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>" class="d-block p-2 ">
@@ -233,58 +234,34 @@
         <div class="hotline d-none d-lg-block">
           <p><i class="fi-rs-headset"></i><span>Hotline</span> 1800-425-1550 </p>
         </div>
-        <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
+        <p class="mobile-promotion"><span class="text-brand">Little car, </span>big personality.</p>
+
+        
         <div class="header-action-right d-block d-lg-none">
           <div class="header-action-2">
+            <%if (typeof user !=='undefined' && user ) { %>
             <div class="header-action-icon-2">
-              <a href="shop-wishlist.html">
+              <a href="user_wishlist">
                 <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
-                <span class="pro-count white">4</span>
               </a>
             </div>
+
             <div class="header-action-icon-2">
               <a class="mini-cart-icon" href="user_cart">
                 <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
-                <span class="pro-count white">2</span>
-              </a>
-              <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                <ul>
-                  <li>
-                    <div class="shopping-cart-img">
-                      <a href="shop-product-right.html"><img alt="Evara" src="/public/assets/imgs/shop/thumbnail-3.jpg"></a>
-                    </div>
-                    <div class="shopping-cart-title">
-                      <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
-                      <h3><span>1 × </span>$800.00</h3>
-                    </div>
-                    <div class="shopping-cart-delete">
-                      <a href="#"><i class="fi-rs-cross-small"></i></a>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="shopping-cart-img">
-                      <a href="shop-product-right.html"><img alt="Evara" src="/public/assets/imgs/shop/thumbnail-4.jpg"></a>
-                    </div>
-                    <div class="shopping-cart-title">
-                      <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                      <h3><span>1 × </span>$3500.00</h3>
-                    </div>
-                    <div class="shopping-cart-delete">
-                      <a href="#"><i class="fi-rs-cross-small"></i></a>
-                    </div>
-                  </li>
-                </ul>
-                <div class="shopping-cart-footer">
-                  <div class="shopping-cart-total">
-                    <h4>Total <span>$383.00</span></h4>
-                  </div>
-                  <div class="shopping-cart-button">
-                    <a href="user_cart">View cart</a>
-                    <a href="shop-checkout.html">Checkout</a>
-                  </div>
-                </div>
-              </div>
+                <span>
+                  <% if (typeof cart==='undefined' || !cart || !cart.products ||cart.products.length===0) { %>
+                  <span class="pro-count white">0</span>
+                  <% } else { %>
+                  <span class="pro-count white">
+                    <%= cart.products.length %>
+                  </span>
+                  <% } %>
+                </span> </a>
+             
             </div>
+            <% } %>
+
             <div class="header-action-icon-2 d-block d-lg-none">
               <div class="burger-icon burger-icon-white">
                 <span class="burger-icon-top"></span>
@@ -294,6 +271,8 @@
             </div>
           </div>
         </div>
+        
+
       </div>
     </div>
   </div>
@@ -302,7 +281,7 @@
   <div class="mobile-header-wrapper-inner">
     <div class="mobile-header-top">
       <div class="mobile-header-logo">
-        <a href="/user_home"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
+        <a href="/user_home"><img src="/public/assets/Logo-diecastcarz.png" alt="logo"></a>
       </div>
       <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
         <button class="close-style search-close">
@@ -324,7 +303,7 @@
             <span class="fi-rs-apps"></span> Browse Categories
           </a>
           <div class="categori-dropdown-wrap categori-dropdown-active-small">
-            
+
             <ul>
               <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
@@ -348,8 +327,8 @@
                   <% if (typeof categories !=='undefined' && categories && categories.length>0 ) { %>
 
                   <% for (let i=7; i < categories.length; i++) { %>
-                    <li class="d-flex align-items-center">
-                      <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
+                  <li class="d-flex align-items-center">
+                    <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
                       <img src="/<%= categories[i].categoryImages %>" alt="" class="ms-2" style="max-width: 30px; height: auto;">
                     </a>
                     <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>" class="d-block p-2 ">
@@ -372,20 +351,20 @@
         <nav>
           <ul class="mobile-menu">
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="/user_home">Home</a>
-              
+
             </li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="user_shop_page">shop</a>
-             
+
             </li>
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="user_account">My Account</a>
-              
+
             </li>
-            
+
             <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Pages</a>
               <ul class="dropdown">
                 <li><a href="about_page">About Us</a></li>
                 <li><a href="contact_page">Contact</a></li>
-                
+
                 <li><a href="privacy_policy_page">Privacy Policy</a></li>
                 <li><a href="terms_page">Terms of Service</a></li>
               </ul>
