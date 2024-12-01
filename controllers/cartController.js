@@ -31,48 +31,73 @@ const user_add_product_to_cart = async (req, res) => {
 
     const userData = req.session.user_id;
 
-    if (userData) {
-
-      const userId = userData;
-      const productId = req.query.productId;
-      let qty = parseInt(req.query.qty, 10) || 1;
-
-      qty = Math.max(1, Math.floor(qty));
-
-      const productData = await Product.findById({ _id: productId });
-
-      let cart = await Cart.findOne({ userId: userId });
-
-      if (!cart) {
-        cart = new Cart({ userId: userId, products: [] });
-      }
-
-      const existingProduct = cart.products.find(
-        (product) => product.productId.toString() === productId
-      );
-
-      if (existingProduct) {
-        existingProduct.quantity += qty;
-      } else {
-        cart.products.push({ productId, quantity: qty });
-      }
-
-      const addedToCart = await cart.save();
-
-      if (addedToCart) {
-        console.log("Product added to cart successfully");
-
-      }
+    if (!userData) {
+      return res.status(401).json({
+        success: false,
+        message: "User not logged in.",
+      });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: "Product added to cart successfully"
-    })
+    const userId = userData;
+    const productId = req.query.productId;
+    let qty = parseInt(req.query.qty, 10) || 1;
+
+    qty = Math.max(1, Math.floor(qty));
+
+    const productData = await Product.findById({ _id: productId });
+    if (!productData) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
+    }
+
+    let cart = await Cart.findOne({ userId: userId });
+
+    if (!cart) {
+      cart = new Cart({ userId: userId, products: [] });
+    }
+
+    if (productData.quantity < qty) {
+      console.log("Product not added, out of stock");
+
+      return res.status(400).json({
+        success: false,
+        message: "Requested quantity exceeds available stock.",
+      });
+    }
+
+
+    const existingProduct = cart.products.find(
+      (product) => product.productId.toString() === productId
+    );
+
+    if (existingProduct) {
+      existingProduct.quantity += qty;
+    } else {
+      cart.products.push({ productId, quantity: qty });
+    }
+
+    const addedToCart = await cart.save();
+
+    if (addedToCart) {
+      console.log("Product added to cart successfully");
+      return res.status(200).json({
+        success: true,
+        message: "Product added to cart successfully"
+      })
+    }
+
+
+    
 
 
   } catch (error) {
     console.log("Error in user_add_product_to_cart : ", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while adding the product to the cart.",
+    });
 
   }
 }

@@ -2,6 +2,9 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
+
+
+
 <%- include("../layouts/user_layouts/user_topnav.ejs") -%>
 
 
@@ -360,34 +363,37 @@
 
 
 
+
   <section class="popular-categories section-padding mt-15 mb-25">
     <div class="container wow fadeIn animated">
       <h3 class="section-title mb-20"><span>Popular</span> Categories</h3>
       <div class="carausel-6-columns-cover position-relative">
         <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-arrows"></div>
-        <div class="carausel-6-columns" id="carausel-6-columns">
+        <div class="carausel-6-columns text-center" id="carausel-6-columns">
 
           <% if (topSellingCategories && typeof topSellingCategories !=='undefined' && topSellingCategories.length>0 ) { %>
-          <% for (let i=0; i < 10; i++) { %>
+          <% for (let i=0; i < 8; i++) { %>
 
           <div class="card-1">
-            <figure class=" img-hover-scale overflow-hidden">
+            <figure class="img-hover-scale overflow-hidden">
               <a href="/user_shop_page?categoryName=<%= topSellingCategories[i]._id %>">
-                <img src="/<%= topSellingCategories[i].categoryImage %>" alt=""> </a>
+                <!-- Using Bootstrap's d-block and mx-auto for centering the image -->
+                <img src="/<%= topSellingCategories[i].categoryImage %>" alt="" class="img-fluid d-block mx-auto" style="max-height: 80%; max-width: 80%;">
+              </a>
             </figure>
-            <h5> <a href="/user_shop_page?categoryName=<%= topSellingCategories[i]._id %>">
+            <h5>
+              <a href="/user_shop_page?categoryName=<%= topSellingCategories[i]._id %>">
                 <%= topSellingCategories[i]._id %>
-              </a> </h5>
-
+              </a>
+            </h5>
 
             <% if(topSellingCategories[i].isCategoryOfferActive) { %>
             <h5 class="text-white bg-danger p-2 rounded text-center">
               <strong>
-                <%= topSellingCategories[i].categoryOfferPercentage %>% Off!
+                <%= topSellingCategories[i].categoryOfferPercentage %>% Off Now!
               </strong>
             </h5>
             <% } %>
-
           </div>
           <% } %>
           <% } %>
@@ -395,6 +401,9 @@
       </div>
     </div>
   </section>
+
+
+
 
 
   <section class="banners mb-15">
@@ -498,38 +507,43 @@
       </div>
     </div>
   </section>
+
   <section class="deals section-padding">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 deal-co">
-          <div class="deal wow fadeIn animated mb-md-4 mb-sm-4 mb-lg-0" style="background-image: url('/public/assets/imgs/banner/bg23.webp');">
-          </div>
+        <!-- First image container -->
+        <div class="col-lg-6 col-12  pt-5">
+          <div style="background-image: url('/public/assets/imgs/banner/bg23.webp'); background-size: cover; background-position: center; padding-top: 56.25%;"></div>
         </div>
-        <div class="col-lg-6 deal-co">
-          <div class="deal wow fadeIn animated" style="background-image: url('/public/assets/imgs/banner/bg1.jpg');">
-          </div>
+        <!-- Second image container -->
+        <div class="col-lg-6 col-12 pt-5">
+          <div style="background-image: url('/public/assets/imgs/banner/bg1.jpg'); background-size: cover; background-position: center; padding-top: 56.25%;"></div>
         </div>
       </div>
     </div>
   </section>
 
+
+
+
+
   <section class="section-padding">
     <div class="container">
       <h3 class="section-title mb-20 wow fadeIn animated"><span>Featured</span> Brands</h3>
-      <div class="carausel-6-columns-cover position-relative wow fadeIn animated">
+      <div class="carausel-6-columns-cover position-relative">
         <div class="slider-arrow slider-arrow-2 carausel-6-columns-arrow" id="carausel-6-columns-3-arrows"></div>
         <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
-
-
 
           <% if (categories && typeof categories !=='undefined' ) { %>
           <% for (let i=0; i < categories.length; i++) { %>
 
-
           <div class="brand-logo">
-            <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
 
-              <img src="/<%= categories[i].categoryImages %>" alt="" style="height: 50%;width: 50%;"> </a>
+            <figure class="img-hover-scale overflow-hidden">
+              <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
+                <img src="/<%= categories[i].categoryImages %>" alt="" style="height: 50%;width: 50%;"> </a>
+            </figure>
+
             <h5 class="pb-2"> <a href="/user_shop_page?categoryName=<%= categories[i].categoryName %>">
                 <%= categories[i].categoryName %>
               </a> </h5>
@@ -537,7 +551,7 @@
             <% if(categories[i].isCategoryOfferActive) { %>
             <span class="text-white p-1  bg-danger rounded text-center">
               <strong>
-                <%= categories[i].categoryOfferPercentage %>% Off!
+                <%= categories[i].categoryOfferPercentage %>% Off Now!
               </strong>
             </span>
             <% } %>
@@ -545,9 +559,6 @@
 
           <% } %>
           <% } %>
-
-
-
 
         </div>
       </div>
@@ -600,7 +611,7 @@
                     </a>
                   </div>
 
-                  <h2><a href="user_product_page?id=<%= topSellingProducts[i]._id %>">
+                  <h2><a href="user_product_page?id=<%= topSellingProducts[i]._id %>" class="clamp-2">
                       <%= topSellingProducts[i].productName %></a></h2>
 
                   <div class="rating-result" title="90%">
@@ -786,17 +797,16 @@
   </section>
 
 
-<section class="quote-section mt-5 pt-4 pb-4" style="background-color: #f8f9fa; text-align: center;">
-  <div class="container">
-    <blockquote class="mb-3" style="font-size: 1.5rem; font-weight: bold; color: #333; font-style: italic;">
-      "Every car tells a story."
-    </blockquote>
-    <blockquote class="mb-3" style="font-size: 1.5rem; font-weight: bold; color: #333; font-style: italic;">
-      "Let your collection drive your imagination."
-    </blockquote>
-  </div>
-</section>
-
+  <section class="quote-section mt-5 pt-4 pb-4" style="background-color: #f8f9fa; text-align: center;">
+    <div class="container">
+      <blockquote class="mb-3" style="font-size: 1.5rem; font-weight: bold; color: #333; font-style: italic;">
+        "Every car tells a story."
+      </blockquote>
+      <blockquote class="mb-3" style="font-size: 1.5rem; font-weight: bold; color: #333; font-style: italic;">
+        "Let your collection drive your imagination."
+      </blockquote>
+    </div>
+  </section>
 
 
 
@@ -813,13 +823,13 @@
   async function addToCart(productId, productName) {
     try {
 
-
-
       const response = await fetch(`/user_cart?productId=${productId}&qty=1`, {
         method: 'POST'
       });
 
       if (!response.ok) {
+        console.error(`Failed to add product: ${productName}. Status: ${response.status}`);
+        addToCartErrorNotification(productName, "is OUT OF STOCK.");
         throw new Error("Error adding product to cart");
       }
 
@@ -827,23 +837,37 @@
 
       if (data.success) {
         addToCartNotification(productName, `is added to cart (Quantity: 1)`);
-      } else {
-        console.error("Error adding product to cart", data.message);
+
+      } else {      
+          addToCartErrorNotification(productName, "could not be added to the cart.");      
+        console.warn(`Add to cart failed for ${productName}: ${data.message}`);
       }
+
     } catch (error) {
       console.error("Error adding product to cart", error);
     }
+  }
+  
+  function addToCartErrorNotification(productName, action) {
+    Toastify({
+      text: `"${productName}"   ${action}`,
+      duration: 1800,
+      backgroundColor: "#FF0000",
+      position: 'right',
+    }).showToast();
+
   }
 
   function addToCartNotification(productName, action) {
     Toastify({
       text: `"${productName}"   ${action}`,
-      duration: 2000,
-      backgroundColor: "#283745",
+      duration: 1500,
+      backgroundColor: "#289743",
       position: 'right',
     }).showToast();
 
   }
+  
 
   async function addToWishlist(productId, productName) {
     try {
@@ -872,7 +896,7 @@
     Toastify({
       text: `"${productName}"   ${action}`,
       duration: 2000,
-      backgroundColor: "#289743",
+      backgroundColor: "#0000FF",
       position: 'right',
     }).showToast();
 

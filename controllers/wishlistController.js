@@ -35,7 +35,6 @@ const user_wishlist = async (req, res) => {
       'products.productId'
     );
 
-
     res.render('user_wishlist', { categories,cart, user: userData, productData: updatedWishlist.products })
 
   } catch (error) {
