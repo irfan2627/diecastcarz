@@ -115,8 +115,8 @@
 
                 <div class="d-flex gap-3 p-3 ">
 
-                  <a aria-label="Add To Wishlist" class="action-btn hover-up btn d-flex align-items-center justify-content-center px-4 py-2 rounded-pill" id="addToWishlistBtn" style="background-color: rgba(230, 225, 225, 0.629); border: 2px solid rgb(190, 182, 182); transition: all 0.3s ease;">
-                    <i class="fi-rs-heart" style="color: red; font-size: 1.5rem;"></i> <!-- Red solid heart -->
+                  <a aria-label="Add To Wishlist" class="action-btn hover-up btn d-flex align-items-center justify-content-center px-4 py-2 rounded-pill"  onclick="addToWishlist('<%= products[i]._id %>', '<%= products[i].productName %>', this, event)" id="addToWishlistBtn" style="background-color: rgba(230, 225, 225, 0.629); border: 2px solid rgb(190, 182, 182); transition: all 0.3s ease;">
+                    <i class="fi-rs-heart" style="color: red; font-size: 1.0rem;"></i> <!-- Red solid heart -->
                   </a>
 
                   <% if (user && typeof user !== 'undefined') { %>

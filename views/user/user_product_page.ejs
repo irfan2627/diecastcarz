@@ -125,7 +125,7 @@
 
                     if (!response.ok) {
                       console.error(`Failed to add product: ${productName}. Status: ${response.status}`);
-        addToCartErrorNotification(productName, "is OUT OF STOCK.");
+                      addToCartErrorNotification(productName, "is OUT OF STOCK.");
                       throw new Error("Error adding product to cart");
                     }
 
@@ -140,21 +140,22 @@
                     console.error("Error adding product to cart", error);
                   }
                 }
-                function addToCartErrorNotification(productName, action) {
-    Toastify({
-      text: `"${productName}"   ${action}`,
-      duration: 1800,
-      backgroundColor: "#FF0000",
-      position: 'right',
-    }).showToast();
 
-  }
+                function addToCartErrorNotification(productName, action) {
+                  Toastify({
+                    text: `"${productName}"   ${action}`,
+                    duration: 1800,
+                    backgroundColor: "#FF0000",
+                    position: 'right',
+                  }).showToast();
+
+                }
 
                 function addToCartNotification(productName, action) {
                   Toastify({
                     text: `"${productName}"   ${action}`,
                     duration: 2000,
-                    backgroundColor: "#283745",
+                    backgroundColor: "#289743",
                     position: 'right',
                   }).showToast();
 
@@ -187,7 +188,7 @@
                   Toastify({
                     text: `"${productName}"   ${action}`,
                     duration: 2000,
-                    backgroundColor: "#289743",
+                    backgroundColor: "#0000FF",
                     position: 'right',
                   }).showToast();
 

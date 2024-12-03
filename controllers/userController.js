@@ -5,7 +5,6 @@ const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel');
 const Coupon = require('../models/couponsModel');
 
-
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring")
 const bcrypt = require('bcryptjs');
@@ -28,7 +27,7 @@ const registerLoad = async (req, res) => {
     try {
         const categories = await Category.find({ isActive: true });
 
-        res.render('register', { categories, message:'' })
+        res.render('register', { categories, message: '' })
     } catch (error) {
         console.log("registerLoad err :" + error.message);
 
@@ -553,7 +552,7 @@ const user_product_page = async (req, res) => {
             relatedProducts = [...relatedProducts, ...otherProducts.slice(0, remainingSpace)];
         }
 
-       
+
         if (relatedProducts) {
             console.log("\n relatedProducts sum is:", relatedProducts.length);
             relatedProducts.forEach(product => {
@@ -570,7 +569,7 @@ const user_product_page = async (req, res) => {
                 cart = new Cart({ userId: userData, products: [] });
             }
 
-            res.render('user_product_page', { products: productData,relatedProducts, user: userData, cart, categories })
+            res.render('user_product_page', { products: productData, relatedProducts, user: userData, cart, categories })
         }
         else {
             res.redirect('/user_home')
@@ -1034,14 +1033,38 @@ const user_apply_referral_code = async (req, res) => {
         if (referralEntered) {
             const existingUserOfReferral = await User.findOneAndUpdate(
                 { referralCode: referralEntered },
-                { $inc: { wallet: walletIncrement, numberOfReferralsDone: numberOfReferrals } },
+                {
+                    $inc: {
+                        wallet: walletIncrement,
+                        numberOfReferralsDone: numberOfReferrals
+                    },
+                    $push: {
+                        walletHistory: {
+                            amount: walletIncrement,
+                            type: 'credit',
+                            description: 'Referral Reward',
+                            timestamp: new Date(),
+                        }
+                    },
+                },
                 { new: true }
             );
 
             if (existingUserOfReferral) {
                 const currentUser = await User.findOneAndUpdate(
                     { username: userData.username },
-                    { $inc: { wallet: walletIncrement }, $set: { isReferralRewardClaimed: true } },
+                    {
+                        $inc: { wallet: walletIncrement },
+                        $push: {
+                            walletHistory: {
+                                amount: walletIncrement,
+                                type: 'credit',
+                                description: 'Referral Reward',
+                                timestamp: new Date(),
+                            }
+                        },
+                        $set: { isReferralRewardClaimed: true }
+                    },
                     { new: true }
                 );
 

@@ -101,6 +101,8 @@ user_route.post('/user_cancel_order', userAuth.isLogin, orderController.user_can
 user_route.get('/user_return_order', userAuth.isLogin, orderController.user_return_order_page)
 user_route.post('/user_return_order', userAuth.isLogin, orderController.user_return_order)
 
+// invoice
+user_route.get('/user_invoice_download', userAuth.isLogin, orderController.user_invoice_download)
 
 // payment
 user_route.post('/createRazorpayOrder', paymentController.createRazorpayOrder);

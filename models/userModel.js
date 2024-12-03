@@ -43,6 +43,27 @@ const addressSchema = new mongoose.Schema({
   }
 });
 
+const walletHistorySchema = new mongoose.Schema({
+  amount: {
+    type: Number,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ['credit', 'debit'],
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+
 const userSchema = new mongoose.Schema({
 
   username: {
@@ -84,10 +105,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+
   wallet: {
     type: Number,
     default: 0,
   },
+  walletHistory: [walletHistorySchema],
+
   couponsUsed: {
     type: String
   },

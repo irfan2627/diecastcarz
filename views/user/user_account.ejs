@@ -234,6 +234,7 @@
                   </div>
                 </div>
 
+
                 <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
                   <div class="card">
                     <div class="card-header">
@@ -245,16 +246,46 @@
                         <div class="col-lg-8">
 
                           <h5 style="margin: 20px;">
-                            Your Current Wallet Balance: ₹
-
-                            <%=user.wallet%>
+                            Your Current Wallet Balance: ₹ <%=user.wallet%>
                           </h5>
+
+                          <h6 class="mt-40 mb-3">Wallet History:</h6>
+                          <% if (user.walletHistory && user.walletHistory.length > 0) { %>
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Type</th>
+                                  <th>Amount</th>
+                                  <th>Description</th>
+                                  <th>Date & Time</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% user.walletHistory.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) 
+                                    .forEach((entry) => { %> <tr>
+                                  <td class="<%= entry.type === 'debit' ? 'text-danger' : 'text-success' %>">
+                                    <%= entry.type.toUpperCase() %>
+                                  </td>
+                                  <td>$<%= entry.amount %></td>
+                                  <td><%= entry.description %></td>
+                                  <td><%= new Date(entry.timestamp).toLocaleString() %></td>
+                                </tr>
+                                <% }) %>
+                              </tbody>
+                            </table>
+                          </div>
+                          <% } else { %>
+                          <p class="text-muted">No wallet history available.</p>
+                          <% } %>
+
 
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
 
                 <div class="tab-pane fade" id="rewards" role="tabpanel" aria-labelledby="rewards-tab">
                   <div class="card">
@@ -263,13 +294,7 @@
                     </div>
                     <div class="card-body contact-from-area">
 
-
-
                       <div class="mt-10">
-
-
-
-
 
                         <% if(user.isReferralRewardClaimed===true){ %>
                         <div class="card">
@@ -283,9 +308,6 @@
                           </div>
 
                         </div>
-
-
-
 
                         <% } else { %>
                         <div class="card">
@@ -306,19 +328,13 @@
                               <input type="submit" style="display: inline-block; width: 100px;" value="Submit" class="btn">
                             </form>
                           </div>
-
-
-
                         </div>
                         <% } %>
-
-
 
                         <% if(user.referralCode){ %>
                         <div class="card-body">
                           Share your referral code with your friends, and
                           both of you will get ₹100 added to the wallet.
-
                           <div class="card-header">
                             <h4>
                               Your Referral Code:
@@ -328,13 +344,10 @@
                             </h4>
                           </div>
                         </div>
-
-
-
                         <%} %>
+
                         <% if(user.numberOfReferralsDone){ %>
                         <div class="card-body">
-
                           <h6 style="margin: 10px;">Number of
                             users joined
                             by
@@ -343,19 +356,11 @@
                           <h6 style="margin: 10px;">
                             Referral rewards earned: ₹ <%= user.numberOfReferralsDone *100 %>
                           </h6>
-
                         </div>
 
                         <%} %>
 
-
-
-
-
                       </div>
-
-
-
                     </div>
                   </div>
                 </div>
@@ -571,7 +576,6 @@
     </div>
   </section>
 </main>
-
 
 
 
