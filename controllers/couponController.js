@@ -172,7 +172,8 @@ const user_apply_coupon = async (req, res) => {
 
         const enteredCoupon = req.query.enteredCoupon;
         const priceChecking = req.query.priceChecking;
-        const couponsData = await Coupon.find({ isDeleted: false }).filter(coupon => !coupon.isExpired);;
+        const allCoupons = await Coupon.find({ isDeleted: false })
+        const couponsData = allCoupons.filter(coupon => !coupon.isExpired);
         const categories = await Category.find({ isActive: true })
 
 
@@ -182,7 +183,6 @@ const user_apply_coupon = async (req, res) => {
         // Check if the coupon exists
         if (!couponData) {
             console.log('USER APPLY COUPON FUNCION 0');
-
             return res.render('user_checkout', {
                 productData: cart.products,
                 user: userData,
