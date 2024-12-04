@@ -172,7 +172,7 @@ const user_apply_coupon = async (req, res) => {
 
         const enteredCoupon = req.query.enteredCoupon;
         const priceChecking = req.query.priceChecking;
-        const couponsData = await Coupon.find({ isDeleted: false });
+        const couponsData = await Coupon.find({ isDeleted: false }).filter(coupon => !coupon.isExpired);;
         const categories = await Category.find({ isActive: true })
 
 

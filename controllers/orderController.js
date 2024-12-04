@@ -933,9 +933,9 @@ const exportOrderToPDF = async (orderId) => {
                     { width: 220, ellipsis: true, lineBreak: true } // Truncate and wrap Product name
                 );  // Truncated Product name if too long
 
-                doc.text(product.price, colX[2], currentY);  // Price column       
+                doc.text(product.price/product.quantity, colX[2], currentY);  // Price column       
                 doc.text(product.quantity, colX[3], currentY);  // Quantity column                 
-                doc.text(product.quantity * product.price, colX[4], currentY);  // Total price column
+                doc.text(product.price, colX[4], currentY);  // Total price column
 
                 // Draw line after each row
                 doc.lineCap('butt')

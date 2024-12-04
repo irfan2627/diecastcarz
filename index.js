@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/diecastcarz_users").then(() => {
-  console.log("Successfully Connected to mongodb://127.0.0.1:27017/diecastcarz_users MongoDB");
+  console.log("\n MongoDB Connected to mongodb://127.0.0.1:27017/diecastcarz_users \n");
 })
 .catch(error => {
   console.log("\n\nMongoDB not Connected! \n  MongoDB Connection Error:", error);
@@ -56,6 +56,6 @@ app.use('/admin', adminRoute)
 // Server listening
 const port = 8000;
 app.listen(port, () => {
-  console.log(`Server is successfully running at : http://127.0.0.1:${port}`);
+  console.log(`\n Server is running at : http://127.0.0.1:${port}\n`);
 });
 
