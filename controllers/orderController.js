@@ -792,6 +792,7 @@ const admin_individual_order_cancel = async (req, res) => {
 
 
 
+
 //////////////////
 // USER INOICE
 /////////////////
@@ -831,28 +832,38 @@ const user_invoice_download = async (req, res) => {
 };
 
 
-// Function to export order to PDF
+
 const exportOrderToPDF = async (orderId) => {
     try {
-        const order = await Order.findOne({ orderid: orderId }).populate('userId').populate('products.productId');
+        const order = await Order.findOne({ orderid: orderId })
+            .populate('userId')
+            .populate('products.productId');
         if (!order) {
             return { success: false, message: 'Order not found' };
         }
 
-        const filePath = `./public/invoices/${orderId}_invoice.pdf`
+        const filePath = path.join(__dirname, '../public/invoices/', `${orderId}_invoice.pdf`);
 
+        // Check if the file already exists
+        if (fs.existsSync(filePath)) {
+            console.log('File already exists. Skipping creation...');
+            return { success: true, message: 'Invoice already exists', filePath };
+        }
+
+        // Initialize PDF document
         const doc = new PDFDocument({ margin: 30 });
-        doc.pipe(fs.createWriteStream(filePath));
 
+        // Create a write stream to the file path
+        const writeStream = fs.createWriteStream(filePath);
+        doc.pipe(writeStream);
 
         // Add header
-        doc.fontSize(25).text("DIECASTCARZ.SHOP", { align: "center" }).moveDown().moveDown()
-
+        doc.fontSize(25).text("DIECASTCARZ.SHOP", { align: "center" }).moveDown().moveDown();
         doc.fontSize(20).text("INVOICE", { align: "center" }).moveDown();
 
         // Add invoice details
         doc.fontSize(10)
-            .text(`Invoice No. : #${order.orderid}`)
+            .text(`Invoice No.: #${order.orderid}`)
             .text(`Order Date: ${order.orderDate ? order.orderDate.toLocaleDateString() : 'N/A'}`)
             .text(`Payment Method: ${order.paymentMethod}`)
             .moveDown();
@@ -937,27 +948,28 @@ const exportOrderToPDF = async (orderId) => {
         }
 
         // Add total summary
-        doc.moveDown().moveDown().moveDown()
-            .font("Helvetica-Bold")
-            .fontSize(12)
-            .text(`Total: $ ${order.totalSum}`)
+        doc.moveDown().moveDown().moveDown().moveDown().moveDown()
+            .font("Helvetica-Bold").fontSize(12)
+            .text(`Total: $${order.totalSum}`)
             .text(`Discount: ${order.discountPercentage}%`)
-            .text(`Shipping Cost: $ 0`)
+            .text(`Shipping Cost: $0`)
             .moveDown()
-            .text(`Final Total: $ ${order.totalPrice}`);
+            .text(`Final Total: $${order.totalPrice}`);
 
         doc.end();
 
-        return { success: true, message: 'Invoice generated successfully', filePath };
+        // Wait for the PDF generation to complete
+        await new Promise((resolve, reject) => {
+            writeStream.on('finish', resolve);
+            writeStream.on('error', reject);
+        });
 
+        return { success: true, message: 'Invoice generated successfully', filePath };
     } catch (error) {
         console.error('Error generating PDF:', error);
-        return render('404', { message: 'Error generating PDF' })
-
+        return { success: false, message: 'Error generating PDF' };
     }
 };
-
-
 
 
 

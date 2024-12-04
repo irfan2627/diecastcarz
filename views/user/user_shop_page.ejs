@@ -115,7 +115,7 @@
 
                 <div class="d-flex gap-3 p-3 ">
 
-                  <a aria-label="Add To Wishlist" class="action-btn hover-up btn d-flex align-items-center justify-content-center px-4 py-2 rounded-pill"  onclick="addToWishlist('<%= products[i]._id %>', '<%= products[i].productName %>', this, event)" id="addToWishlistBtn" style="background-color: rgba(230, 225, 225, 0.629); border: 2px solid rgb(190, 182, 182); transition: all 0.3s ease;">
+                  <a aria-label="Add To Wishlist" class="action-btn hover-up btn d-flex align-items-center justify-content-center px-4 py-2 rounded-pill" onclick="addToWishlist('<%= products[i]._id %>', '<%= products[i].productName %>', this, event)" id="addToWishlistBtn" style="background-color: rgba(230, 225, 225, 0.629); border: 2px solid rgb(190, 182, 182); transition: all 0.3s ease;">
                     <i class="fi-rs-heart" style="color: red; font-size: 1.0rem;"></i> <!-- Red solid heart -->
                   </a>
 
@@ -156,7 +156,6 @@
               <li>
                 <a href="/user_shop_page?categoryName=All Brands" class="d-block p-2 <%= selectedCategory === 'All Brands' ? 'active' : '' %>">
                   <span>All Brands</span>
-                  <span class="count">5</span>
                 </a>
               </li>
               <% categories.forEach(category => { %>
@@ -322,7 +321,7 @@
       if (data.success) {
         addToCartNotification(productName, `is added to cart`);
         // Change the text of the button to "Added"
-        changeButtonText(clickedElement, productName);
+        changeCartButton(clickedElement, productName);
       } else {
         console.error("Error adding product to cart", data.message);
       }
@@ -386,17 +385,19 @@
 
 
 
-  function changeButtonText(clicked, productName) {
+  function changeCartButton(clicked, productName) {
     // Check if the product is out of stock
     if (clicked.parentElement.querySelector('.save-price')) {
       return; // If out of stock, do nothing
     }
 
     // Modify the button content
-    clicked.innerHTML = `<a aria-label="Added To Cart" class="btn-cart" style="float:right; font-size:20px font-weight:700;" id="addToCartButton">
-        <i class="fi-rs-shopping-bag-add"></i> Added To Cart</a>`;
-
+    clicked.innerHTML = ` <a aria-label="Added To Cart" class="btn-cart" style="float:right; font-size:20px font-weight:700; color:white " id="addToCartButton">
+        <i class="fi-rs-check"></i> Added To Cart</a>`;
+    clicked.style.pointerEvents = "none";
   }
+
+
 </script>
 
 <%- include("../layouts/user_layouts/user_footer.ejs") -%>
